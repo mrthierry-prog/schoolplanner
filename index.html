@@ -18,9 +18,9 @@
     }
 
     header {
+      padding: 30px 20px;
       background: linear-gradient(135deg, #4338ca, #7c3aed);
       color: white;
-      padding: 32px 20px;
       text-align: center;
     }
 
@@ -33,15 +33,15 @@
     }
 
     main {
-      width: min(950px, calc(100% - 30px));
+      width: min(1500px, calc(100% - 30px));
       margin: 25px auto;
     }
 
     .kaart {
-      background: white;
       padding: 22px;
       margin-bottom: 22px;
       border-radius: 16px;
+      background: white;
       box-shadow: 0 5px 18px rgba(15, 23, 42, 0.08);
     }
 
@@ -52,7 +52,7 @@
 
     .formulier {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(4, 1fr);
       gap: 15px;
     }
 
@@ -72,8 +72,8 @@
       padding: 12px;
       border: 1px solid #cbd5e1;
       border-radius: 9px;
-      font-size: 16px;
       background: white;
+      font-size: 16px;
     }
 
     input:focus,
@@ -101,23 +101,36 @@
       background: #3730a3;
     }
 
+    .legenda {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .legenda span {
+      padding: 7px 11px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
     .weekbediening {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 20px;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .weekbediening h2 {
+      margin: 0;
+      text-align: center;
     }
 
     .weekbediening button {
       background: #e0e7ff;
       color: #3730a3;
-    }
-
-    #week-titel {
-      margin: 0;
-      text-align: center;
-      font-size: 20px;
     }
 
     .vandaag-knop {
@@ -127,25 +140,43 @@
       color: white;
     }
 
+    .agenda-buitenrand {
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+
+    #weekagenda {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(170px, 1fr));
+      gap: 10px;
+      min-width: 1250px;
+    }
+
     .dag {
-      margin-bottom: 16px;
+      min-height: 420px;
       border: 1px solid #dbe3ee;
-      border-radius: 13px;
-      overflow: hidden;
+      border-radius: 12px;
       background: #f8fafc;
+      overflow: hidden;
     }
 
     .dagkop {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 13px 16px;
+      padding: 12px 8px;
       background: #e9eef6;
+      text-align: center;
     }
 
     .dagkop h3 {
       margin: 0;
+      font-size: 16px;
       text-transform: capitalize;
+    }
+
+    .dagkop p {
+      margin: 4px 0 0;
+      color: #64748b;
+      font-size: 13px;
     }
 
     .dag.vandaag {
@@ -158,35 +189,33 @@
     }
 
     .taken {
-      min-height: 65px;
-      padding: 12px;
+      padding: 9px;
     }
 
     .geen-taken {
-      margin: 8px;
       color: #94a3b8;
-      font-style: italic;
+      font-size: 13px;
+      text-align: center;
     }
 
     .taak {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 13px;
       margin-bottom: 9px;
-      border-left: 8px solid;
+      padding: 10px;
+      border-top: 6px solid;
       border-radius: 9px;
       background: white;
-      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.07);
+      box-shadow: 0 2px 7px rgba(15, 23, 42, 0.08);
     }
 
-    .taak:last-child {
-      margin-bottom: 0;
+    .taak-bovenkant {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
     }
 
     .afvinken {
-      width: 22px;
-      height: 22px;
+      width: 19px;
+      height: 19px;
       flex-shrink: 0;
       cursor: pointer;
     }
@@ -198,27 +227,33 @@
 
     .vak {
       display: inline-block;
-      padding: 4px 9px;
-      margin-bottom: 5px;
-      border-radius: 20px;
-      font-size: 13px;
+      padding: 4px 7px;
+      margin-bottom: 6px;
+      border-radius: 15px;
+      font-size: 12px;
       font-weight: bold;
     }
 
     .taak-tekst {
       margin: 0;
+      font-size: 14px;
       font-weight: bold;
       overflow-wrap: anywhere;
     }
 
     .taak-soort {
-      margin: 4px 0 0;
+      margin: 5px 0 0;
       color: #64748b;
-      font-size: 14px;
+      font-size: 12px;
+    }
+
+    .toets-melding {
+      color: #dc2626;
+      font-weight: bold;
     }
 
     .taak.klaar {
-      opacity: 0.5;
+      opacity: 0.45;
     }
 
     .taak.klaar .taak-tekst {
@@ -226,26 +261,21 @@
     }
 
     .verwijderen {
+      width: 100%;
+      margin-top: 9px;
+      padding: 6px;
       background: #fee2e2;
       color: #b91c1c;
-      padding: 8px 10px;
+      font-size: 12px;
     }
 
-    .legenda {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
-      margin-top: 18px;
+    @media (max-width: 900px) {
+      .formulier {
+        grid-template-columns: 1fr 1fr;
+      }
     }
 
-    .legenda-item {
-      padding: 7px 11px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: bold;
-    }
-
-    @media (max-width: 650px) {
+    @media (max-width: 600px) {
       .formulier {
         grid-template-columns: 1fr;
       }
@@ -255,25 +285,12 @@
       }
 
       .weekbediening button {
-        padding: 9px;
-        font-size: 13px;
+        padding: 8px;
+        font-size: 12px;
       }
 
-      #week-titel {
+      .weekbediening h2 {
         font-size: 16px;
-      }
-
-      .taak {
-        align-items: flex-start;
-      }
-
-      .verwijderen {
-        font-size: 0;
-      }
-
-      .verwijderen::after {
-        content: "×";
-        font-size: 20px;
       }
     }
   </style>
@@ -282,7 +299,7 @@
 <body>
   <header>
     <h1>Mijn Schoolagenda</h1>
-    <p>Plan uw schoolwerk per week en vink af wat klaar is.</p>
+    <p>Mijn schoolwerk overzichtelijk per week.</p>
   </header>
 
   <main>
@@ -292,12 +309,12 @@
       <form id="taak-formulier">
         <div class="formulier">
           <div>
-            <label for="datum">Op welke dag?</label>
+            <label for="datum">Dag</label>
             <input type="date" id="datum" required>
           </div>
 
           <div>
-            <label for="vak">Voor welk vak?</label>
+            <label for="vak">Vak</label>
             <select id="vak" required>
               <option value="">Kies een vak</option>
               <option value="Economie">Economie</option>
@@ -310,7 +327,7 @@
           </div>
 
           <div>
-            <label for="soort">Wat voor schoolwerk?</label>
+            <label for="soort">Soort schoolwerk</label>
             <select id="soort">
               <option value="Huiswerk">Huiswerk</option>
               <option value="Toets">Toets</option>
@@ -339,46 +356,44 @@
       </form>
 
       <div class="legenda">
-        <span class="legenda-item" style="background:#fde047;">Economie</span>
-        <span class="legenda-item" style="background:#ef4444;color:white;">Mens en maatschappij</span>
-        <span class="legenda-item" style="background:#3b82f6;color:white;">Nederlands</span>
-        <span class="legenda-item" style="background:#22c55e;color:white;">Engels</span>
-        <span class="legenda-item" style="background:#a855f7;color:white;">Wiskunde</span>
-        <span class="legenda-item" style="background:#f9a8d4;">Biologie</span>
+        <span style="background:#fde047;">Economie</span>
+        <span style="background:#fca5a5;">Mens en maatschappij</span>
+        <span style="background:#93c5fd;">Nederlands</span>
+        <span style="background:#86efac;">Engels</span>
+        <span style="background:#d8b4fe;">Wiskunde</span>
+        <span style="background:#f9a8d4;">Biologie</span>
+        <span style="background:#dc2626;color:white;">Toets: altijd rood</span>
       </div>
     </section>
 
     <section class="kaart">
       <div class="weekbediening">
-        <button id="vorige-week" type="button">← Vorige</button>
+        <button id="vorige-week" type="button">← Vorige week</button>
         <h2 id="week-titel">Weekoverzicht</h2>
-        <button id="volgende-week" type="button">Volgende →</button>
+        <button id="volgende-week" type="button">Volgende week →</button>
       </div>
 
       <button id="deze-week" class="vandaag-knop" type="button">
-        Ga naar deze week
+        Deze week
       </button>
 
-      <div id="weekagenda"></div>
+      <div class="agenda-buitenrand">
+        <div id="weekagenda"></div>
+      </div>
     </section>
   </main>
 
   <script>
     const kleuren = {
       "Economie": "#fde047",
-      "Mens en maatschappij": "#ef4444",
-      "Nederlands": "#3b82f6",
-      "Engels": "#22c55e",
-      "Wiskunde": "#a855f7",
+      "Mens en maatschappij": "#fca5a5",
+      "Nederlands": "#93c5fd",
+      "Engels": "#86efac",
+      "Wiskunde": "#d8b4fe",
       "Biologie": "#f9a8d4"
     };
 
-    const lichteTekst = [
-      "Mens en maatschappij",
-      "Nederlands",
-      "Engels",
-      "Wiskunde"
-    ];
+    const toetsKleur = "#dc2626";
 
     const formulier = document.getElementById("taak-formulier");
     const datumVeld = document.getElementById("datum");
@@ -448,21 +463,6 @@
       return `${jaar}-${maand}-${dag}`;
     }
 
-    function mooieDatum(datum) {
-      return datum.toLocaleDateString("nl-NL", {
-        weekday: "long",
-        day: "numeric",
-        month: "long"
-      });
-    }
-
-    function korteDatum(datum) {
-      return datum.toLocaleDateString("nl-NL", {
-        day: "numeric",
-        month: "long"
-      });
-    }
-
     function bewaarTaken() {
       localStorage.setItem("mijnSchooltaken", JSON.stringify(taken));
     }
@@ -489,9 +489,15 @@
     }
 
     function maakTaakElement(taak) {
+      const isToets = taak.soort === "Toets";
+      const gebruikteKleur = isToets ? toetsKleur : kleuren[taak.vak];
+
       const taakElement = document.createElement("div");
       taakElement.className = taak.klaar ? "taak klaar" : "taak";
-      taakElement.style.borderLeftColor = kleuren[taak.vak];
+      taakElement.style.borderTopColor = gebruikteKleur;
+
+      const bovenkant = document.createElement("div");
+      bovenkant.className = "taak-bovenkant";
 
       const vinkje = document.createElement("input");
       vinkje.type = "checkbox";
@@ -506,10 +512,10 @@
 
       const vak = document.createElement("span");
       vak.className = "vak";
-      vak.textContent = taak.vak;
-      vak.style.backgroundColor = kleuren[taak.vak];
+      vak.textContent = isToets ? "TOETS: " + taak.vak : taak.vak;
+      vak.style.backgroundColor = gebruikteKleur;
 
-      if (lichteTekst.includes(taak.vak)) {
+      if (isToets) {
         vak.style.color = "white";
       }
 
@@ -518,23 +524,25 @@
       omschrijving.textContent = taak.omschrijving;
 
       const soort = document.createElement("p");
-      soort.className = "taak-soort";
+      soort.className = isToets ? "taak-soort toets-melding" : "taak-soort";
       soort.textContent = taak.soort;
 
       inhoud.appendChild(vak);
       inhoud.appendChild(omschrijving);
       inhoud.appendChild(soort);
 
+      bovenkant.appendChild(vinkje);
+      bovenkant.appendChild(inhoud);
+
       const verwijderKnop = document.createElement("button");
       verwijderKnop.className = "verwijderen";
       verwijderKnop.type = "button";
-      verwijderKnop.textContent = "Verwijder";
+      verwijderKnop.textContent = "Verwijderen";
       verwijderKnop.addEventListener("click", function () {
         verwijderTaak(taak.id);
       });
 
-      taakElement.appendChild(vinkje);
-      taakElement.appendChild(inhoud);
+      taakElement.appendChild(bovenkant);
       taakElement.appendChild(verwijderKnop);
 
       return taakElement;
@@ -547,7 +555,16 @@
       zondag.setDate(zondag.getDate() + 6);
 
       weekTitel.textContent =
-        korteDatum(getoondeMaandag) + " t/m " + korteDatum(zondag);
+        getoondeMaandag.toLocaleDateString("nl-NL", {
+          day: "numeric",
+          month: "short"
+        }) +
+        " t/m " +
+        zondag.toLocaleDateString("nl-NL", {
+          day: "numeric",
+          month: "short",
+          year: "numeric"
+        });
 
       const vandaagCode = maakDatumCode(new Date());
 
@@ -563,11 +580,19 @@
         const dagkop = document.createElement("div");
         dagkop.className = "dagkop";
 
-        const dagTitel = document.createElement("h3");
-        dagTitel.textContent = mooieDatum(datum);
+        const dagNaam = document.createElement("h3");
+        dagNaam.textContent = datum.toLocaleDateString("nl-NL", {
+          weekday: "long"
+        });
 
-        dagkop.appendChild(dagTitel);
-        dagElement.appendChild(dagkop);
+        const dagDatum = document.createElement("p");
+        dagDatum.textContent = datum.toLocaleDateString("nl-NL", {
+          day: "numeric",
+          month: "long"
+        });
+
+        dagkop.appendChild(dagNaam);
+        dagkop.appendChild(dagDatum);
 
         const takenVak = document.createElement("div");
         takenVak.className = "taken";
@@ -579,7 +604,7 @@
         if (takenVanDag.length === 0) {
           const legeTekst = document.createElement("p");
           legeTekst.className = "geen-taken";
-          legeTekst.textContent = "Nog niets ingepland.";
+          legeTekst.textContent = "Nog niets ingepland";
           takenVak.appendChild(legeTekst);
         } else {
           takenVanDag.forEach(function (taak) {
@@ -587,6 +612,7 @@
           });
         }
 
+        dagElement.appendChild(dagkop);
         dagElement.appendChild(takenVak);
         weekagenda.appendChild(dagElement);
       }
