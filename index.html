@@ -3,56 +3,69 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mijn Schoolplanner</title>
+  <title>Mijn Schoolagenda</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #f1f5f9;
+      background-color: #f4f6fb;
       color: #1e293b;
     }
 
     header {
-      background-color: #4f46e5;
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
       color: white;
-      text-align: center;
       padding: 35px 20px;
+      text-align: center;
     }
 
     header h1 {
-      margin: 0;
+      margin: 0 0 8px;
       font-size: 36px;
     }
 
     header p {
-      margin-bottom: 0;
+      margin: 0;
     }
 
     main {
-      max-width: 800px;
+      max-width: 1000px;
       margin: 30px auto;
       padding: 0 20px;
     }
 
     section {
       background-color: white;
-      margin-bottom: 25px;
       padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      margin-bottom: 25px;
+      border-radius: 16px;
+      box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
     }
 
     h2 {
-      color: #4f46e5;
       margin-top: 0;
+      color: #4338ca;
+    }
+
+    .formulier-raster {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .volledige-breedte {
+      grid-column: 1 / -1;
     }
 
     label {
       display: block;
-      font-weight: bold;
-      margin-top: 15px;
       margin-bottom: 6px;
+      font-weight: bold;
     }
 
     input,
@@ -60,9 +73,8 @@
       width: 100%;
       padding: 12px;
       border: 1px solid #cbd5e1;
-      border-radius: 8px;
+      border-radius: 9px;
       font-size: 16px;
-      box-sizing: border-box;
     }
 
     input:focus,
@@ -71,88 +83,351 @@
       outline: none;
     }
 
+    input[type="color"] {
+      height: 46px;
+      padding: 4px;
+      cursor: pointer;
+    }
+
     button {
-      width: 100%;
-      margin-top: 22px;
-      padding: 13px;
       border: none;
-      border-radius: 8px;
-      background-color: #4f46e5;
-      color: white;
+      border-radius: 9px;
+      padding: 13px 18px;
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
     }
 
-    button:hover {
+    .toevoegen {
+      width: 100%;
+      background-color: #4f46e5;
+      color: white;
+    }
+
+    .toevoegen:hover {
       background-color: #3730a3;
     }
 
-    .leeg {
-      padding: 15px;
-      background-color: #f8fafc;
-      border-radius: 8px;
-      color: #64748b;
+    .agenda-dag {
+      margin-top: 22px;
     }
 
-    footer {
-      text-align: center;
+    .datum-titel {
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e2e8f0;
+      color: #334155;
+    }
+
+    .taak {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 10px;
+      padding: 15px;
+      border-left: 8px solid;
+      border-radius: 10px;
+      background-color: #f8fafc;
+    }
+
+    .taak-informatie {
+      flex: 1;
+    }
+
+    .taak-vak {
+      display: inline-block;
+      margin-bottom: 5px;
+      padding: 4px 9px;
+      border-radius: 20px;
+      color: white;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .taak-omschrijving {
+      margin: 0;
+      font-weight: bold;
+    }
+
+    .taak-soort {
+      margin: 5px 0 0;
       color: #64748b;
+      font-size: 14px;
+    }
+
+    .afvinken {
+      width: 23px;
+      height: 23px;
+      cursor: pointer;
+    }
+
+    .taak.klaar {
+      opacity: 0.55;
+    }
+
+    .taak.klaar .taak-omschrijving {
+      text-decoration: line-through;
+    }
+
+    .verwijderen {
+      background-color: #fee2e2;
+      color: #b91c1c;
+      padding: 8px 11px;
+    }
+
+    .lege-agenda {
       padding: 20px;
+      border-radius: 10px;
+      background-color: #f8fafc;
+      color: #64748b;
+      text-align: center;
+    }
+
+    @media (max-width: 650px) {
+      .formulier-raster {
+        grid-template-columns: 1fr;
+      }
+
+      .volledige-breedte {
+        grid-column: auto;
+      }
+
+      .taak {
+        align-items: flex-start;
+      }
+
+      header h1 {
+        font-size: 29px;
+      }
     }
   </style>
 </head>
 
 <body>
   <header>
-    <h1>Mijn Schoolplanner</h1>
-    <p>Houd huiswerk, toetsen en cijfers overzichtelijk bij.</p>
+    <h1>Mijn Schoolagenda</h1>
+    <p>Plan uw huiswerk en vink af wat klaar is.</p>
   </header>
 
   <main>
     <section>
-      <h2>Nieuw schoolwerk toevoegen</h2>
+      <h2>Schoolwerk inplannen</h2>
 
-      <form>
-        <label for="datum">Wanneer moet het af zijn?</label>
-        <input type="date" id="datum" name="datum">
+      <form id="schoolwerk-formulier">
+        <div class="formulier-raster">
+          <div>
+            <label for="datum">Datum</label>
+            <input type="date" id="datum" required>
+          </div>
 
-        <label for="vak">Voor welk vak?</label>
-        <input type="text" id="vak" name="vak" placeholder="Bijvoorbeeld: wiskunde">
+          <div>
+            <label for="vak">Vak</label>
+            <input
+              type="text"
+              id="vak"
+              placeholder="Bijvoorbeeld: wiskunde"
+              required
+            >
+          </div>
 
-        <label for="opdracht">Wat moet ik doen?</label>
-        <input
-          type="text"
-          id="opdracht"
-          name="opdracht"
-          placeholder="Bijvoorbeeld: hoofdstuk 4 leren"
-        >
+          <div>
+            <label for="soort">Soort schoolwerk</label>
+            <select id="soort">
+              <option>Huiswerk</option>
+              <option>Toets</option>
+              <option>Werkstuk</option>
+              <option>Leren</option>
+              <option>Presentatie</option>
+            </select>
+          </div>
 
-        <label for="soort">Wat voor schoolwerk is het?</label>
-        <select id="soort" name="soort">
-          <option value="huiswerk">Huiswerk</option>
-          <option value="toets">Toets</option>
-          <option value="werkstuk">Werkstuk</option>
-          <option value="leren">Leren</option>
-        </select>
+          <div>
+            <label for="kleur">Kleur van het vak</label>
+            <input type="color" id="kleur" value="#4f46e5">
+          </div>
 
-        <button type="submit">Toevoegen aan planner</button>
+          <div class="volledige-breedte">
+            <label for="omschrijving">Wat moet u doen?</label>
+            <input
+              type="text"
+              id="omschrijving"
+              placeholder="Bijvoorbeeld: opdrachten 1 tot en met 10"
+              required
+            >
+          </div>
+
+          <div class="volledige-breedte">
+            <button class="toevoegen" type="submit">
+              Toevoegen aan mijn agenda
+            </button>
+          </div>
+        </div>
       </form>
     </section>
 
     <section>
-      <h2>Mijn planning</h2>
-      <p class="leeg">Er staat nog geen schoolwerk in de planner.</p>
-    </section>
-
-    <section>
-      <h2>Mijn cijfers</h2>
-      <p class="leeg">Er zijn nog geen cijfers ingevuld.</p>
+      <h2>Mijn agenda</h2>
+      <div id="agenda"></div>
     </section>
   </main>
 
-  <footer>
-    Mijn Schoolplanner
-  </footer>
+  <script>
+    const formulier = document.getElementById("schoolwerk-formulier");
+    const agenda = document.getElementById("agenda");
+    const vakVeld = document.getElementById("vak");
+    const kleurVeld = document.getElementById("kleur");
+
+    let taken = JSON.parse(localStorage.getItem("schooltaken")) || [];
+    let vakkleuren = JSON.parse(localStorage.getItem("vakkleuren")) || {};
+
+    formulier.addEventListener("submit", function (gebeurtenis) {
+      gebeurtenis.preventDefault();
+
+      const vak = vakVeld.value.trim();
+      const vakNaam = vak.toLowerCase();
+      const kleur = kleurVeld.value;
+
+      vakkleuren[vakNaam] = kleur;
+
+      const nieuweTaak = {
+        id: Date.now(),
+        datum: document.getElementById("datum").value,
+        vak: vak,
+        soort: document.getElementById("soort").value,
+        kleur: kleur,
+        omschrijving: document.getElementById("omschrijving").value.trim(),
+        klaar: false
+      };
+
+      taken.push(nieuweTaak);
+      bewaarAlles();
+      formulier.reset();
+      kleurVeld.value = "#4f46e5";
+      toonAgenda();
+    });
+
+    vakVeld.addEventListener("input", function () {
+      const gekozenVak = vakVeld.value.trim().toLowerCase();
+
+      if (vakkleuren[gekozenVak]) {
+        kleurVeld.value = vakkleuren[gekozenVak];
+      }
+    });
+
+    function bewaarAlles() {
+      localStorage.setItem("schooltaken", JSON.stringify(taken));
+      localStorage.setItem("vakkleuren", JSON.stringify(vakkleuren));
+    }
+
+    function veranderStatus(id) {
+      const taak = taken.find(function (taak) {
+        return taak.id === id;
+      });
+
+      taak.klaar = !taak.klaar;
+      bewaarAlles();
+      toonAgenda();
+    }
+
+    function verwijderTaak(id) {
+      taken = taken.filter(function (taak) {
+        return taak.id !== id;
+      });
+
+      bewaarAlles();
+      toonAgenda();
+    }
+
+    function maakDatumNetjes(datum) {
+      return new Date(datum + "T12:00:00").toLocaleDateString("nl-NL", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      });
+    }
+
+    function toonAgenda() {
+      agenda.innerHTML = "";
+
+      if (taken.length === 0) {
+        agenda.innerHTML =
+          '<p class="lege-agenda">Er staat nog niets in uw agenda.</p>';
+        return;
+      }
+
+      taken.sort(function (a, b) {
+        return a.datum.localeCompare(b.datum);
+      });
+
+      const datums = [...new Set(taken.map(function (taak) {
+        return taak.datum;
+      }))];
+
+      datums.forEach(function (datum) {
+        const dag = document.createElement("div");
+        dag.className = "agenda-dag";
+
+        const titel = document.createElement("h3");
+        titel.className = "datum-titel";
+        titel.textContent = maakDatumNetjes(datum);
+        dag.appendChild(titel);
+
+        const takenVanDezeDag = taken.filter(function (taak) {
+          return taak.datum === datum;
+        });
+
+        takenVanDezeDag.forEach(function (taak) {
+          const taakElement = document.createElement("div");
+          taakElement.className = taak.klaar ? "taak klaar" : "taak";
+          taakElement.style.borderLeftColor = taak.kleur;
+
+          const vinkje = document.createElement("input");
+          vinkje.type = "checkbox";
+          vinkje.className = "afvinken";
+          vinkje.checked = taak.klaar;
+          vinkje.addEventListener("change", function () {
+            veranderStatus(taak.id);
+          });
+
+          const informatie = document.createElement("div");
+          informatie.className = "taak-informatie";
+
+          const vak = document.createElement("span");
+          vak.className = "taak-vak";
+          vak.style.backgroundColor = taak.kleur;
+          vak.textContent = taak.vak;
+
+          const omschrijving = document.createElement("p");
+          omschrijving.className = "taak-omschrijving";
+          omschrijving.textContent = taak.omschrijving;
+
+          const soort = document.createElement("p");
+          soort.className = "taak-soort";
+          soort.textContent = taak.soort;
+
+          informatie.appendChild(vak);
+          informatie.appendChild(omschrijving);
+          informatie.appendChild(soort);
+
+          const verwijderKnop = document.createElement("button");
+          verwijderKnop.className = "verwijderen";
+          verwijderKnop.textContent = "Verwijder";
+          verwijderKnop.addEventListener("click", function () {
+            verwijderTaak(taak.id);
+          });
+
+          taakElement.appendChild(vinkje);
+          taakElement.appendChild(informatie);
+          taakElement.appendChild(verwijderKnop);
+          dag.appendChild(taakElement);
+        });
+
+        agenda.appendChild(dag);
+      });
+    }
+
+    toonAgenda();
+  </script>
 </body>
 </html>
