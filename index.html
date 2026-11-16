@@ -10,13 +10,41 @@
   <h1>Mijn Schoolplanner</h1>
   <p>Hier houd ik mijn huiswerk, toetsen en cijfers bij.</p>
 
-  <h2>Mijn planner</h2>
-  <p>Hier komt mijn planning voor schoolwerk.</p>
+  <h2>Nieuw schoolwerk toevoegen</h2>
 
-  <h2>Huiswerk en toetsen</h2>
-  <p>Hier komt een overzicht van mijn huiswerk en toetsen.</p>
+  <form>
+    <label for="datum">Wanneer moet het af zijn?</label>
+    <input type="date" id="datum" name="datum">
+
+    <br><br>
+
+    <label for="vak">Voor welk vak?</label>
+    <input type="text" id="vak" name="vak">
+
+    <br><br>
+
+    <label for="opdracht">Wat moet ik doen?</label>
+    <input type="text" id="opdracht" name="opdracht">
+
+    <br><br>
+
+    <label for="soort">Wat voor schoolwerk is het?</label>
+    <select id="soort" name="soort">
+      <option value="huiswerk">Huiswerk</option>
+      <option value="toets">Toets</option>
+      <option value="werkstuk">Werkstuk</option>
+      <option value="leren">Leren</option>
+    </select>
+
+    <br><br>
+
+    <button type="submit">Toevoegen aan planner</button>
+  </form>
+
+  <h2>Mijn planning</h2>
+  <p>Er staat nog geen schoolwerk in de planner.</p>
 
   <h2>Mijn cijfers</h2>
-  <p>Hier komt een klein overzicht van mijn cijfers.</p>
+  <p>Er zijn nog geen cijfers ingevuld.</p>
 </body>
 </html>
