@@ -4,47 +4,155 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mijn Schoolplanner</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f1f5f9;
+      color: #1e293b;
+    }
+
+    header {
+      background-color: #4f46e5;
+      color: white;
+      text-align: center;
+      padding: 35px 20px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 36px;
+    }
+
+    header p {
+      margin-bottom: 0;
+    }
+
+    main {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    section {
+      background-color: white;
+      margin-bottom: 25px;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    h2 {
+      color: #4f46e5;
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-top: 15px;
+      margin-bottom: 6px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #4f46e5;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 22px;
+      padding: 13px;
+      border: none;
+      border-radius: 8px;
+      background-color: #4f46e5;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #3730a3;
+    }
+
+    .leeg {
+      padding: 15px;
+      background-color: #f8fafc;
+      border-radius: 8px;
+      color: #64748b;
+    }
+
+    footer {
+      text-align: center;
+      color: #64748b;
+      padding: 20px;
+    }
+  </style>
 </head>
 
 <body>
-  <h1>Mijn Schoolplanner</h1>
-  <p>Hier houd ik mijn huiswerk, toetsen en cijfers bij.</p>
+  <header>
+    <h1>Mijn Schoolplanner</h1>
+    <p>Houd huiswerk, toetsen en cijfers overzichtelijk bij.</p>
+  </header>
 
-  <h2>Nieuw schoolwerk toevoegen</h2>
+  <main>
+    <section>
+      <h2>Nieuw schoolwerk toevoegen</h2>
 
-  <form>
-    <label for="datum">Wanneer moet het af zijn?</label>
-    <input type="date" id="datum" name="datum">
+      <form>
+        <label for="datum">Wanneer moet het af zijn?</label>
+        <input type="date" id="datum" name="datum">
 
-    <br><br>
+        <label for="vak">Voor welk vak?</label>
+        <input type="text" id="vak" name="vak" placeholder="Bijvoorbeeld: wiskunde">
 
-    <label for="vak">Voor welk vak?</label>
-    <input type="text" id="vak" name="vak">
+        <label for="opdracht">Wat moet ik doen?</label>
+        <input
+          type="text"
+          id="opdracht"
+          name="opdracht"
+          placeholder="Bijvoorbeeld: hoofdstuk 4 leren"
+        >
 
-    <br><br>
+        <label for="soort">Wat voor schoolwerk is het?</label>
+        <select id="soort" name="soort">
+          <option value="huiswerk">Huiswerk</option>
+          <option value="toets">Toets</option>
+          <option value="werkstuk">Werkstuk</option>
+          <option value="leren">Leren</option>
+        </select>
 
-    <label for="opdracht">Wat moet ik doen?</label>
-    <input type="text" id="opdracht" name="opdracht">
+        <button type="submit">Toevoegen aan planner</button>
+      </form>
+    </section>
 
-    <br><br>
+    <section>
+      <h2>Mijn planning</h2>
+      <p class="leeg">Er staat nog geen schoolwerk in de planner.</p>
+    </section>
 
-    <label for="soort">Wat voor schoolwerk is het?</label>
-    <select id="soort" name="soort">
-      <option value="huiswerk">Huiswerk</option>
-      <option value="toets">Toets</option>
-      <option value="werkstuk">Werkstuk</option>
-      <option value="leren">Leren</option>
-    </select>
+    <section>
+      <h2>Mijn cijfers</h2>
+      <p class="leeg">Er zijn nog geen cijfers ingevuld.</p>
+    </section>
+  </main>
 
-    <br><br>
-
-    <button type="submit">Toevoegen aan planner</button>
-  </form>
-
-  <h2>Mijn planning</h2>
-  <p>Er staat nog geen schoolwerk in de planner.</p>
-
-  <h2>Mijn cijfers</h2>
-  <p>Er zijn nog geen cijfers ingevuld.</p>
+  <footer>
+    Mijn Schoolplanner
+  </footer>
 </body>
 </html>
