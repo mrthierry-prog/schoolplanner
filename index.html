@@ -1,624 +1,98 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mijn Schoolagenda</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #eef2f7;
-      color: #1e293b;
-    }
-
-    header {
-      padding: 30px 20px;
-      background: linear-gradient(135deg, #4338ca, #7c3aed);
-      color: white;
-      text-align: center;
-    }
-
-    header h1 {
-      margin: 0 0 8px;
-    }
-
-    header p {
-      margin: 0;
-    }
-
-    main {
-      width: min(1500px, calc(100% - 30px));
-      margin: 25px auto;
-    }
-
-    .kaart {
-      padding: 22px;
-      margin-bottom: 22px;
-      border-radius: 16px;
-      background: white;
-      box-shadow: 0 5px 18px rgba(15, 23, 42, 0.08);
-    }
-
-    h2 {
-      margin-top: 0;
-      color: #4338ca;
-    }
-
-    .formulier {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-    }
-
-    .hele-breedte {
-      grid-column: 1 / -1;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: bold;
-    }
-
-    input,
-    select {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #cbd5e1;
-      border-radius: 9px;
-      background: white;
-      font-size: 16px;
-    }
-
-    input:focus,
-    select:focus {
-      border-color: #4f46e5;
-      outline: none;
-    }
-
-    button {
-      border: none;
-      border-radius: 9px;
-      padding: 11px 16px;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .toevoegen {
-      width: 100%;
-      background: #4f46e5;
-      color: white;
-    }
-
-    .toevoegen:hover {
-      background: #3730a3;
-    }
-
-    .legenda {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 18px;
-    }
-
-    .legenda span {
-      padding: 7px 11px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: bold;
-    }
-
-    .weekbediening {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      margin-bottom: 15px;
-    }
-
-    .weekbediening h2 {
-      margin: 0;
-      text-align: center;
-    }
-
-    .weekbediening button {
-      background: #e0e7ff;
-      color: #3730a3;
-    }
-
-    .vandaag-knop {
-      display: block;
-      margin: 0 auto 20px;
-      background: #4f46e5;
-      color: white;
-    }
-
-    .agenda-buitenrand {
-      width: 100%;
-      overflow-x: auto;
-      padding-bottom: 10px;
-    }
-
-    #weekagenda {
-      display: grid;
-      grid-template-columns: repeat(7, minmax(170px, 1fr));
-      gap: 10px;
-      min-width: 1250px;
-    }
-
-    .dag {
-      min-height: 420px;
-      border: 1px solid #dbe3ee;
-      border-radius: 12px;
-      background: #f8fafc;
-      overflow: hidden;
-    }
-
-    .dagkop {
-      padding: 12px 8px;
-      background: #e9eef6;
-      text-align: center;
-    }
-
-    .dagkop h3 {
-      margin: 0;
-      font-size: 16px;
-      text-transform: capitalize;
-    }
-
-    .dagkop p {
-      margin: 4px 0 0;
-      color: #64748b;
-      font-size: 13px;
-    }
-
-    .dag.vandaag {
-      border: 2px solid #4f46e5;
-    }
-
-    .dag.vandaag .dagkop {
-      background: #e0e7ff;
-      color: #3730a3;
-    }
-
-    .taken {
-      padding: 9px;
-    }
-
-    .geen-taken {
-      color: #94a3b8;
-      font-size: 13px;
-      text-align: center;
-    }
-
-    .taak {
-      margin-bottom: 9px;
-      padding: 10px;
-      border-top: 6px solid;
-      border-radius: 9px;
-      background: white;
-      box-shadow: 0 2px 7px rgba(15, 23, 42, 0.08);
-    }
-
-    .taak-bovenkant {
-      display: flex;
-      align-items: flex-start;
-      gap: 7px;
-    }
-
-    .afvinken {
-      width: 19px;
-      height: 19px;
-      flex-shrink: 0;
-      cursor: pointer;
-    }
-
-    .taak-inhoud {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .vak {
-      display: inline-block;
-      padding: 4px 7px;
-      margin-bottom: 6px;
-      border-radius: 15px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .taak-tekst {
-      margin: 0;
-      font-size: 14px;
-      font-weight: bold;
-      overflow-wrap: anywhere;
-    }
-
-    .taak-soort {
-      margin: 5px 0 0;
-      color: #64748b;
-      font-size: 12px;
-    }
-
-    .toets-melding {
-      color: #dc2626;
-      font-weight: bold;
-    }
-
-    .taak.klaar {
-      opacity: 0.45;
-    }
-
-    .taak.klaar .taak-tekst {
-      text-decoration: line-through;
-    }
-
-    .verwijderen {
-      width: 100%;
-      margin-top: 9px;
-      padding: 6px;
-      background: #fee2e2;
-      color: #b91c1c;
-      font-size: 12px;
-    }
-
-    @media (max-width: 900px) {
-      .formulier {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .formulier {
-        grid-template-columns: 1fr;
-      }
-
-      .hele-breedte {
-        grid-column: auto;
-      }
-
-      .weekbediening button {
-        padding: 8px;
-        font-size: 12px;
-      }
-
-      .weekbediening h2 {
-        font-size: 16px;
-      }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mijn Schoolplanner</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--ink:#20263a;--muted:#687087;--accent:#5865d9;--line:#e5e8f1}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 Arial,sans-serif}
+header{background:linear-gradient(120deg,#5865d9,#8791f0);color:white;padding:28px 18px}
+header .wrap,main{max-width:1050px;margin:auto}h1{margin:0 0 5px;font-size:30px}header p{margin:0;opacity:.9}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:18px auto 0;max-width:1050px;padding:0 18px}
+nav button,.btn{border:0;border-radius:10px;padding:10px 14px;background:#e9ebff;color:#303b9b;font-weight:700;cursor:pointer}
+nav button.active,.btn.primary{background:var(--accent);color:white}
+main{padding:18px}.panel{display:none}.panel.active{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:18px;margin:0 0 16px;box-shadow:0 3px 14px #27335b0b}
+h2{margin:0 0 14px;font-size:22px}h3{margin:0 0 10px;font-size:17px}.muted{color:var(--muted);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.stat{background:#f0f1ff;border-radius:12px;padding:15px}.stat strong{display:block;font-size:26px;color:#4652c5}
+label{display:block;font-weight:700;font-size:14px;margin:9px 0 4px}
+input,select,textarea{width:100%;padding:10px;border:1px solid #ccd1e2;border-radius:9px;font:inherit;background:white}
+textarea{min-height:85px;resize:vertical}.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+button{font:inherit}.btn{margin-top:12px}.task{border:1px solid var(--line);border-left:5px solid #8791f0;border-radius:10px;padding:12px;margin:9px 0;background:white}
+.task.test{border-left-color:#e45a68}.task.done{opacity:.58}.task.done .taskname{text-decoration:line-through}
+.tasktop{display:flex;gap:10px;align-items:flex-start}.tasktop input{width:auto;margin-top:5px}.taskname{font-weight:700;flex:1}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.small{font-size:13px;padding:6px 9px;border-radius:7px;border:0;cursor:pointer;background:#eef0f7}
+.small.danger{background:#ffe9eb;color:#a62c3a}.empty{padding:15px;color:var(--muted);text-align:center}
+table{border-collapse:collapse;width:100%;margin-top:10px}th,td{text-align:left;padding:9px;border-bottom:1px solid var(--line)}th{font-size:13px;color:var(--muted)}
+.note{background:#fff9df;border-radius:10px;padding:12px;margin:8px 0}
+@media(max-width:600px){header{padding:22px 16px}h1{font-size:25px}main{padding:12px}nav{padding:0 12px}nav button{flex:1}}
+</style>
 </head>
-
 <body>
-  <header>
-    <h1>Mijn Schoolagenda</h1>
-    <p>Mijn schoolwerk overzichtelijk per week.</p>
-  </header>
-
-  <main>
-    <section class="kaart">
-      <h2>Schoolwerk inplannen</h2>
-
-      <form id="taak-formulier">
-        <div class="formulier">
-          <div>
-            <label for="datum">Dag</label>
-            <input type="date" id="datum" required>
-          </div>
-
-          <div>
-            <label for="vak">Vak</label>
-            <select id="vak" required>
-              <option value="">Kies een vak</option>
-              <option value="Economie">Economie</option>
-              <option value="Mens en maatschappij">Mens en maatschappij</option>
-              <option value="Nederlands">Nederlands</option>
-              <option value="Engels">Engels</option>
-              <option value="Wiskunde">Wiskunde</option>
-              <option value="Biologie">Biologie</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="soort">Soort schoolwerk</label>
-            <select id="soort">
-              <option value="Huiswerk">Huiswerk</option>
-              <option value="Toets">Toets</option>
-              <option value="Leren">Leren</option>
-              <option value="Werkstuk">Werkstuk</option>
-              <option value="Presentatie">Presentatie</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="omschrijving">Wat moet u doen?</label>
-            <input
-              type="text"
-              id="omschrijving"
-              placeholder="Bijvoorbeeld: hoofdstuk 3 leren"
-              required
-            >
-          </div>
-
-          <div class="hele-breedte">
-            <button class="toevoegen" type="submit">
-              Toevoegen aan weekagenda
-            </button>
-          </div>
-        </div>
-      </form>
-
-      <div class="legenda">
-        <span style="background:#fde047;">Economie</span>
-        <span style="background:#fca5a5;">Mens en maatschappij</span>
-        <span style="background:#93c5fd;">Nederlands</span>
-        <span style="background:#86efac;">Engels</span>
-        <span style="background:#d8b4fe;">Wiskunde</span>
-        <span style="background:#f9a8d4;">Biologie</span>
-        <span style="background:#dc2626;color:white;">Toets: altijd rood</span>
-      </div>
-    </section>
-
-    <section class="kaart">
-      <div class="weekbediening">
-        <button id="vorige-week" type="button">← Vorige week</button>
-        <h2 id="week-titel">Weekoverzicht</h2>
-        <button id="volgende-week" type="button">Volgende week →</button>
-      </div>
-
-      <button id="deze-week" class="vandaag-knop" type="button">
-        Deze week
-      </button>
-
-      <div class="agenda-buitenrand">
-        <div id="weekagenda"></div>
-      </div>
-    </section>
-  </main>
-
-  <script>
-    const kleuren = {
-      "Economie": "#fde047",
-      "Mens en maatschappij": "#fca5a5",
-      "Nederlands": "#93c5fd",
-      "Engels": "#86efac",
-      "Wiskunde": "#d8b4fe",
-      "Biologie": "#f9a8d4"
-    };
-
-    const toetsKleur = "#dc2626";
-
-    const formulier = document.getElementById("taak-formulier");
-    const datumVeld = document.getElementById("datum");
-    const weekagenda = document.getElementById("weekagenda");
-    const weekTitel = document.getElementById("week-titel");
-
-    let taken = JSON.parse(localStorage.getItem("mijnSchooltaken")) || [];
-    let getoondeMaandag = bepaalMaandag(new Date());
-
-    datumVeld.value = maakDatumCode(new Date());
-
-    formulier.addEventListener("submit", function (gebeurtenis) {
-      gebeurtenis.preventDefault();
-
-      const nieuweTaak = {
-        id: Date.now(),
-        datum: datumVeld.value,
-        vak: document.getElementById("vak").value,
-        soort: document.getElementById("soort").value,
-        omschrijving: document.getElementById("omschrijving").value.trim(),
-        klaar: false
-      };
-
-      taken.push(nieuweTaak);
-      bewaarTaken();
-
-      getoondeMaandag = bepaalMaandag(
-        new Date(nieuweTaak.datum + "T12:00:00")
-      );
-
-      formulier.reset();
-      datumVeld.value = maakDatumCode(new Date());
-      toonWeek();
-    });
-
-    document.getElementById("vorige-week").addEventListener("click", function () {
-      getoondeMaandag.setDate(getoondeMaandag.getDate() - 7);
-      toonWeek();
-    });
-
-    document.getElementById("volgende-week").addEventListener("click", function () {
-      getoondeMaandag.setDate(getoondeMaandag.getDate() + 7);
-      toonWeek();
-    });
-
-    document.getElementById("deze-week").addEventListener("click", function () {
-      getoondeMaandag = bepaalMaandag(new Date());
-      toonWeek();
-    });
-
-    function bepaalMaandag(datum) {
-      const nieuweDatum = new Date(datum);
-      nieuweDatum.setHours(12, 0, 0, 0);
-
-      const dagnummer = nieuweDatum.getDay();
-      const verschil = dagnummer === 0 ? -6 : 1 - dagnummer;
-
-      nieuweDatum.setDate(nieuweDatum.getDate() + verschil);
-      return nieuweDatum;
-    }
-
-    function maakDatumCode(datum) {
-      const jaar = datum.getFullYear();
-      const maand = String(datum.getMonth() + 1).padStart(2, "0");
-      const dag = String(datum.getDate()).padStart(2, "0");
-
-      return `${jaar}-${maand}-${dag}`;
-    }
-
-    function bewaarTaken() {
-      localStorage.setItem("mijnSchooltaken", JSON.stringify(taken));
-    }
-
-    function vinkTaakAf(id) {
-      const taak = taken.find(function (taak) {
-        return taak.id === id;
-      });
-
-      if (taak) {
-        taak.klaar = !taak.klaar;
-        bewaarTaken();
-        toonWeek();
-      }
-    }
-
-    function verwijderTaak(id) {
-      taken = taken.filter(function (taak) {
-        return taak.id !== id;
-      });
-
-      bewaarTaken();
-      toonWeek();
-    }
-
-    function maakTaakElement(taak) {
-      const isToets = taak.soort === "Toets";
-      const gebruikteKleur = isToets ? toetsKleur : kleuren[taak.vak];
-
-      const taakElement = document.createElement("div");
-      taakElement.className = taak.klaar ? "taak klaar" : "taak";
-      taakElement.style.borderTopColor = gebruikteKleur;
-
-      const bovenkant = document.createElement("div");
-      bovenkant.className = "taak-bovenkant";
-
-      const vinkje = document.createElement("input");
-      vinkje.type = "checkbox";
-      vinkje.className = "afvinken";
-      vinkje.checked = taak.klaar;
-      vinkje.addEventListener("change", function () {
-        vinkTaakAf(taak.id);
-      });
-
-      const inhoud = document.createElement("div");
-      inhoud.className = "taak-inhoud";
-
-      const vak = document.createElement("span");
-      vak.className = "vak";
-      vak.textContent = isToets ? "TOETS: " + taak.vak : taak.vak;
-      vak.style.backgroundColor = gebruikteKleur;
-
-      if (isToets) {
-        vak.style.color = "white";
-      }
-
-      const omschrijving = document.createElement("p");
-      omschrijving.className = "taak-tekst";
-      omschrijving.textContent = taak.omschrijving;
-
-      const soort = document.createElement("p");
-      soort.className = isToets ? "taak-soort toets-melding" : "taak-soort";
-      soort.textContent = taak.soort;
-
-      inhoud.appendChild(vak);
-      inhoud.appendChild(omschrijving);
-      inhoud.appendChild(soort);
-
-      bovenkant.appendChild(vinkje);
-      bovenkant.appendChild(inhoud);
-
-      const verwijderKnop = document.createElement("button");
-      verwijderKnop.className = "verwijderen";
-      verwijderKnop.type = "button";
-      verwijderKnop.textContent = "Verwijderen";
-      verwijderKnop.addEventListener("click", function () {
-        verwijderTaak(taak.id);
-      });
-
-      taakElement.appendChild(bovenkant);
-      taakElement.appendChild(verwijderKnop);
-
-      return taakElement;
-    }
-
-    function toonWeek() {
-      weekagenda.innerHTML = "";
-
-      const zondag = new Date(getoondeMaandag);
-      zondag.setDate(zondag.getDate() + 6);
-
-      weekTitel.textContent =
-        getoondeMaandag.toLocaleDateString("nl-NL", {
-          day: "numeric",
-          month: "short"
-        }) +
-        " t/m " +
-        zondag.toLocaleDateString("nl-NL", {
-          day: "numeric",
-          month: "short",
-          year: "numeric"
-        });
-
-      const vandaagCode = maakDatumCode(new Date());
-
-      for (let nummer = 0; nummer < 7; nummer++) {
-        const datum = new Date(getoondeMaandag);
-        datum.setDate(getoondeMaandag.getDate() + nummer);
-
-        const datumCode = maakDatumCode(datum);
-        const dagElement = document.createElement("div");
-        dagElement.className =
-          datumCode === vandaagCode ? "dag vandaag" : "dag";
-
-        const dagkop = document.createElement("div");
-        dagkop.className = "dagkop";
-
-        const dagNaam = document.createElement("h3");
-        dagNaam.textContent = datum.toLocaleDateString("nl-NL", {
-          weekday: "long"
-        });
-
-        const dagDatum = document.createElement("p");
-        dagDatum.textContent = datum.toLocaleDateString("nl-NL", {
-          day: "numeric",
-          month: "long"
-        });
-
-        dagkop.appendChild(dagNaam);
-        dagkop.appendChild(dagDatum);
-
-        const takenVak = document.createElement("div");
-        takenVak.className = "taken";
-
-        const takenVanDag = taken.filter(function (taak) {
-          return taak.datum === datumCode;
-        });
-
-        if (takenVanDag.length === 0) {
-          const legeTekst = document.createElement("p");
-          legeTekst.className = "geen-taken";
-          legeTekst.textContent = "Nog niets ingepland";
-          takenVak.appendChild(legeTekst);
-        } else {
-          takenVanDag.forEach(function (taak) {
-            takenVak.appendChild(maakTaakElement(taak));
-          });
-        }
-
-        dagElement.appendChild(dagkop);
-        dagElement.appendChild(takenVak);
-        weekagenda.appendChild(dagElement);
-      }
-    }
-
-    toonWeek();
-  </script>
-</body>
-</html>
+<header><div class="wrap"><h1>📚 Mijn Schoolplanner</h1><p>Alles voor school op één plek. Je gegevens worden automatisch bewaard op dit apparaat.</p></div></header>
+<nav>
+<button class="active" data-tab="home">Overzicht</button><button data-tab="planner">Dagplanner</button><button data-tab="tests">Toetsen</button><button data-tab="grades">Cijfers</button><button data-tab="notes">Notities</button>
+</nav>
+<main>
+<section id="home" class="panel active">
+<div class="card"><h2>Welkom!</h2><p class="muted">Hier zie je wat eraan komt en wat je al hebt afgerond.</p><div class="grid">
+<div class="stat"><strong id="openCount">0</strong>Open taken</div><div class="stat"><strong id="testCount">0</strong>Komende toetsen</div><div class="stat"><strong id="doneCount">0</strong>Afgeronde taken</div></div></div>
+<div class="card"><h2>Vandaag</h2><div id="todayList"></div></div><div class="card"><h2>Eerstvolgende deadlines en toetsen</h2><div id="soonList"></div></div>
+</section>
+<section id="planner" class="panel">
+<div class="card"><h2 id="formTitle">Taak toevoegen</h2><input type="hidden" id="editId">
+<div class="formgrid"><div><label for="taskDate">Wanneer ga je eraan werken?</label><input type="date" id="taskDate"></div><div><label for="deadline">Deadline (optioneel)</label><input type="date" id="deadline"></div>
+<div><label for="subject">Vak</label><select id="subject"><option>Nederlands</option><option>Engels</option><option>Wiskunde</option><option>Biologie</option><option>Economie</option><option>Mens en maatschappij</option><option>Anders</option></select></div>
+<div><label for="kind">Soort</label><select id="kind"><option>Huiswerk</option><option>Toets</option><option>Leren</option><option>Werkstuk</option><option>Presentatie</option></select></div>
+<div><label for="duration">Tijd nodig (minuten)</label><input type="number" id="duration" min="0" placeholder="Bijv. 30"></div></div>
+<label for="description">Wat moet je doen?</label><input id="description" placeholder="Bijv. opdrachten 1 t/m 5 maken">
+<label for="taskNote">Extra notitie (optioneel)</label><textarea id="taskNote" placeholder="Bijv. boek meenemen of paragraaf 3 leren"></textarea>
+<button class="btn primary" id="saveTask">Taak bewaren</button> <button class="btn" id="cancelEdit" style="display:none">Annuleren</button>
+</div><div class="card"><h2>Mijn planning</h2><div class="formgrid"><div><label for="filterDate">Filter op datum</label><input type="date" id="filterDate"></div><div><label for="filterSubject">Filter op vak</label><select id="filterSubject"><option value="">Alle vakken</option><option>Nederlands</option><option>Engels</option><option>Wiskunde</option><option>Biologie</option><option>Economie</option><option>Mens en maatschappij</option><option>Anders</option></select></div></div><div id="taskList"></div></div>
+</section>
+<section id="tests" class="panel"><div class="card"><h2>Toetsenoverzicht</h2><p class="muted">Alle taken die als ‘Toets’ zijn ingesteld, verschijnen hier automatisch.</p><div id="testsList"></div></div></section>
+<section id="grades" class="panel"><div class="card"><h2>Cijfer toevoegen</h2><div class="formgrid"><div><label for="gradeSubject">Vak</label><select id="gradeSubject"><option>Nederlands</option><option>Engels</option><option>Wiskunde</option><option>Biologie</option><option>Economie</option><option>Mens en maatschappij</option><option>Anders</option></select></div><div><label for="gradeValue">Behaald cijfer</label><input id="gradeValue" type="number" min="1" max="10" step=".1" placeholder="Bijv. 7,5"></div><div><label for="weight">Weging</label><input id="weight" type="number" min=".1" step=".1" value="1"></div></div><label for="gradeDesc">Omschrijving (optioneel)</label><input id="gradeDesc" placeholder="Bijv. Hoofdstuk 2"><button class="btn primary" id="addGrade">Cijfer bewaren</button></div>
+<div class="card"><h2>Gemiddelden</h2><div id="averages"></div></div>
+<div class="card"><h2>Welk cijfer heb ik nodig?</h2><p class="muted">Bereken welk cijfer je voor je volgende toets nodig hebt om je gewenste gemiddelde te halen. De volgende toets telt mee met de ingevulde weging.</p><div class="formgrid"><div><label for="targetSubject">Vak</label><select id="targetSubject"><option>Nederlands</option><option>Engels</option><option>Wiskunde</option><option>Biologie</option><option>Economie</option><option>Mens en maatschappij</option><option>Anders</option></select></div><div><label for="targetAverage">Gewenst gemiddelde</label><input id="targetAverage" type="number" min="1" max="10" step=".1" value="7"></div><div><label for="nextWeight">Weging volgende toets</label><input id="nextWeight" type="number" min=".1" step=".1" value="1"></div></div><button class="btn primary" id="calculate">Bereken</button><p id="calcResult"></p><div id="gradeList"></div></div></section>
+<section id="notes" class="panel"><div class="card"><h2>Nieuwe notitie</h2><label for="noteTitle">Titel</label><input id="noteTitle" placeholder="Bijv. Dingen voor morgen"><label for="noteText">Notitie</label><textarea id="noteText" placeholder="Schrijf hier je notitie..."></textarea><button class="btn primary" id="addNote">Notitie bewaren</button></div><div class="card"><h2>Mijn notities</h2><div id="notesList"></div></div></section>
+<div class="card"><h3>Back-up van je planner</h3><p class="muted">Download af en toe een reservekopie. Zo kun je je gegevens bewaren als je van browser of computer wisselt.</p><button class="btn" id="export">Back-up downloaden</button><label for="importFile">Back-up terugzetten</label><input type="file" id="importFile" accept="application/json"><button class="btn" id="clearData">Alle plannergegevens wissen</button></div>
+</main>
+<script>
+const KEY='mijnSchoolplanner_v2';
+let data={tasks:[],grades:[],notes:[]};
+try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved)data=saved;else{const old=JSON.parse(localStorage.getItem('mijnSchooltaken')||'[]');if(Array.isArray(old))data.tasks=old.map((t,i)=>({id:t.id||Date.now()+i,date:t.date||t.datum||'',deadline:'',subject:t.subject||t.vak||'Anders',kind:t.kind||t.type||'Huiswerk',description:t.description||t.omschrijving||t.taak||'',note:'',duration:'',done:!!(t.done||t.completed)}));save()}}catch(e){}
+const $=id=>document.getElementById(id), today=()=>new Date().toISOString().slice(0,10);
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function fmt(d){return d?new Date(d+'T12:00:00').toLocaleDateString('nl-NL'):'Geen datum'}
+function taskHTML(t){return `<div class="task ${t.kind==='Toets'?'test':''} ${t.done?'done':''}"><div class="tasktop"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})"><div class="taskname">${esc(t.description||'Zonder titel')} <span class="muted">— ${esc(t.subject)} · ${esc(t.kind)}</span></div></div><div class="muted">Plannen: ${fmt(t.date)} · Deadline: ${fmt(t.deadline)} ${t.duration?'· '+esc(t.duration)+' min':''}</div>${t.note?`<p>${esc(t.note)}</p>`:''}<div class="actions"><button class="small" onclick="editTask(${t.id})">Wijzigen</button><button class="small danger" onclick="deleteTask(${t.id})">Verwijderen</button></div></div>`}
+function render(){const tasks=data.tasks||[],open=tasks.filter(t=>!t.done),tests=tasks.filter(t=>t.kind==='Toets'&&!t.done).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+$('openCount').textContent=open.length;$('doneCount').textContent=tasks.filter(t=>t.done).length;$('testCount').textContent=tests.length;
+$('todayList').innerHTML=tasks.filter(t=>t.date===today()).map(taskHTML).join('')||'<div class="empty">Geen taken gepland voor vandaag 🎉</div>';
+$('soonList').innerHTML=tasks.filter(t=>!t.done&&(t.deadline||t.kind==='Toets')).sort((a,b)=>(a.deadline||a.date||'').localeCompare(b.deadline||b.date||'')).slice(0,6).map(taskHTML).join('')||'<div class="empty">Nog niets ingepland.</div>';
+const fd=$('filterDate').value,fs=$('filterSubject').value;let shown=tasks.filter(t=>(!fd||t.date===fd)&&(!fs||t.subject===fs)).sort((a,b)=>(a.date||'').localeCompare(b.date||''));$('taskList').innerHTML=shown.map(taskHTML).join('')||'<div class="empty">Geen taken gevonden.</div>';
+$('testsList').innerHTML=tests.map(taskHTML).join('')||'<div class="empty">Je hebt nog geen openstaande toetsen ingevoerd.</div>';
+renderGrades();$('notesList').innerHTML=(data.notes||[]).map(n=>`<div class="note"><strong>${esc(n.title)}</strong><p>${esc(n.text)}</p><button class="small danger" onclick="deleteNote(${n.id})">Verwijderen</button></div>`).join('')||'<div class="empty">Je hebt nog geen notities.</div>'}
+function resetForm(){$('editId').value='';$('formTitle').textContent='Taak toevoegen';$('saveTask').textContent='Taak bewaren';$('cancelEdit').style.display='none';['taskDate','deadline','description','taskNote','duration'].forEach(id=>$(id).value='')}
+$('saveTask').onclick=()=>{let obj={id:$('editId').value?Number($('editId').value):Date.now(),date:$('taskDate').value,deadline:$('deadline').value,subject:$('subject').value,kind:$('kind').value,description:$('description').value.trim(),note:$('taskNote').value.trim(),duration:$('duration').value,done:false};if(!obj.description){alert('Vul in wat je moet doen.');return}let i=data.tasks.findIndex(t=>t.id===obj.id);if(i>=0){obj.done=data.tasks[i].done;data.tasks[i]=obj}else data.tasks.push(obj);resetForm();save()};
+$('cancelEdit').onclick=resetForm;
+window.editTask=id=>{let t=data.tasks.find(x=>x.id===id);if(!t)return;$('editId').value=id;$('taskDate').value=t.date||'';$('deadline').value=t.deadline||'';$('subject').value=t.subject;$('kind').value=t.kind;$('description').value=t.description;$('taskNote').value=t.note||'';$('duration').value=t.duration||'';$('formTitle').textContent='Taak wijzigen';$('saveTask').textContent='Wijzigingen bewaren';$('cancelEdit').style.display='inline-block';showTab('planner');window.scrollTo(0,0)};
+window.deleteTask=id=>{if(confirm('Deze taak verwijderen?')){data.tasks=data.tasks.filter(t=>t.id!==id);save()}};
+window.toggleTask=id=>{let t=data.tasks.find(x=>x.id===id);if(t){t.done=!t.done;save()}};
+$('filterDate').onchange=render;$('filterSubject').onchange=render;
+$('addGrade').onclick=()=>{let v=Number($('gradeValue').value),w=Number($('weight').value);if(v<1||v>10||!w||w<=0){alert('Vul een cijfer tussen 1 en 10 en een weging groter dan 0 in.');return}data.grades.push({id:Date.now(),subject:$('gradeSubject').value,value:v,weight:w,desc:$('gradeDesc').value});$('gradeValue').value='';$('gradeDesc').value='';save()};
+function renderGrades(){let subjects=[...new Set((data.grades||[]).map(g=>g.subject))];$('averages').innerHTML=subjects.map(s=>{let a=data.grades.filter(g=>g.subject===s),w=a.reduce((n,g)=>n+g.weight,0),avg=a.reduce((n,g)=>n+g.value*g.weight,0)/w;return `<p><strong>${esc(s)}:</strong> ${avg.toFixed(2).replace('.',',')} <span class="muted">(${a.length} cijfers)</span></p>`}).join('')||'<p class="empty">Voeg je eerste cijfer toe om gemiddelden te zien.</p>';
+$('gradeList').innerHTML=(data.grades||[]).map(g=>`<div class="task"><strong>${esc(g.subject)}: ${g.value.toFixed(1).replace('.',',')}</strong> · weging ${g.weight} <span class="muted">${esc(g.desc||'')}</span> <button class="small danger" onclick="deleteGrade(${g.id})">Verwijderen</button></div>`).join('')}
+window.deleteGrade=id=>{data.grades=data.grades.filter(g=>g.id!==id);save()};
+$('calculate').onclick=()=>{let s=$('targetSubject').value,target=Number($('targetAverage').value),w=Number($('nextWeight').value),a=data.grades.filter(g=>g.subject===s),sum=a.reduce((n,g)=>n+g.value*g.weight,0),weights=a.reduce((n,g)=>n+g.weight,0);if(target<1||target>10||w<=0){$('calcResult').textContent='Vul een gemiddelde tussen 1 en 10 en een geldige weging in.';return}let needed=(target*(weights+w)-sum)/w;$('calcResult').textContent=weights?`Je hebt ongeveer ${needed.toFixed(2).replace('.',',')} nodig voor je volgende cijfer.`:`Je hebt nog geen cijfers voor ${s}. Je volgende cijfer bepaalt je gemiddelde.`;if(needed>10)$('calcResult').textContent+=' Dat is hoger dan een 10; met één toets kun je dit gemiddelde dus niet halen.';if(needed<1)$('calcResult').textContent+=' Een 1 of hoger is genoeg om dit gemiddelde te behouden.'};
+$('addNote').onclick=()=>{let title=$('noteTitle').value.trim(),text=$('noteText').value.trim();if(!title&&!text){alert('Schrijf eerst iets op.');return}data.notes.unshift({id:Date.now(),title:title||'Notitie',text});$('noteTitle').value='';$('noteText').value='';save()};
+window.deleteNote=id=>{data.notes=data.notes.filter(n=>n.id!==id);save()};
+function showTab(id){document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===id))}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+$('export').onclick=()=>{let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='schoolplanner-backup.json';a.click();URL.revokeObjectURL(a.href)};
+$('importFile').onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!d.tasks||!d.grades||!d.notes)throw 0;data=d;save();alert('Back-up teruggezet!')}catch(_){alert('Dit bestand lijkt geen geldige plannerback-up.')}};r.readAsText(f)};
+$('clearData').onclick=()=>{if(confirm('Weet je zeker dat je alle taken, cijfers en notities wilt wissen?')){data={tasks:[],grades:[],notes:[]};save()}};
+render();
+</script>
+</body></html>
