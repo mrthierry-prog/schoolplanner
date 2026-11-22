@@ -33,6 +33,27 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 footer{text-align:center;color:#aaa3b2;font-size:11px;margin-top:32px}
 @media(max-width:850px){.week-wrap,.layout-2{grid-template-columns:1fr}.week-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:600px){.app{padding:16px 13px 40px}.topbar{align-items:flex-start}.brand h1{font-size:18px}.welcome{padding:20px;align-items:flex-start;flex-direction:column}.welcome h2{font-size:22px}.tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.tile{padding:14px;min-height:116px}.week-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.form-grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.top-actions .btn{font-size:12px;padding:8px}.date-pill{font-size:12px}}
+
+/* Weekrooster */
+.rooster-layout{display:grid;grid-template-columns:1fr;gap:16px}
+.rooster-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:9px}
+.rooster-day{background:#fcfbfe;border:1px solid var(--line);border-radius:14px;padding:10px;min-height:150px}
+.rooster-day h3{font-size:13px;margin:0 0 10px;color:var(--lilac-dark)}
+.rooster-block{border-radius:10px;padding:8px;margin:7px 0;font-size:12px;background:var(--lilac-pale);overflow-wrap:anywhere}
+.rooster-block.study{background:var(--pink-pale);color:#9c5578}
+.rooster-block strong{display:block;font-size:12px;margin-bottom:3px}
+.rooster-block small{display:block;opacity:.8;margin-top:3px}
+.rooster-block button{border:0;background:#ffffffa8;border-radius:7px;padding:3px 6px;margin-top:6px;font-size:11px;color:inherit}
+.week-task{display:flex;align-items:flex-start;gap:9px;padding:11px;border:1px solid var(--line);border-radius:12px;margin:8px 0}
+.week-task .task-info{flex:1;min-width:0}
+.week-task.done .task-info strong{text-decoration:line-through;opacity:.55}
+.week-task small{display:block;color:var(--muted);margin-top:4px}
+.week-switch{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.week-switch strong{color:var(--lilac-dark)}
+.rooster-help{font-size:12px;color:var(--muted);margin:0 0 12px}
+@media(max-width:900px){.rooster-days{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:600px){.rooster-days{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 </style>
 </head>
 <body>
@@ -52,6 +73,7 @@ footer{text-align:center;color:#aaa3b2;font-size:11px;margin-top:32px}
   <button class="tile" onclick="showPage('grades')"><span class="ico">🌟</span><strong>Cijfers</strong><small>Gemiddelden en berekeningen</small></button>
   <button class="tile" onclick="showPage('notes')"><span class="ico">🗒️</span><strong>Notities</strong><small>Bewaar ideeën en aantekeningen</small></button>
   <button class="tile" onclick="showPage('timer')"><span class="ico">⏱️</span><strong>Studietimer</strong><small>25 minuten leren, 5 pauze</small></button>
+  <button class="tile" onclick="showPage('rooster')"><span class="ico">📅</span><strong>Mijn rooster</strong><small>School, thuisstudie en weekopdrachten</small></button>
  </section>
  <div class="section-title"><div><h2>Mijn week</h2><p>Je geplande schoolwerk per dag</p></div><button class="btn small" onclick="showPage('planner')">+ Taak toevoegen</button></div>
  <section class="week-wrap"><div class="panel"><div class="week-grid" id="weekGrid"></div></div><aside class="panel"><h3 style="margin:0 0 8px;font-size:15px">Binnenkort</h3><div id="upcoming"></div></aside></section>
@@ -67,6 +89,44 @@ footer{text-align:center;color:#aaa3b2;font-size:11px;margin-top:32px}
  </div><button class="btn primary" type="submit">Taak opslaan</button></form></div>
  <div class="panel"><h3 style="margin-top:0">Mijn taken</h3><div class="field"><label>Toon taken</label><select id="taskFilter" onchange="renderTasks()"><option value="all">Alle taken</option><option value="open">Nog te doen</option><option value="done">Afgerond</option></select></div><div id="taskList" class="list"></div></div></div>
 </section>
+
+<section id="rooster" class="page">
+ <button class="back" onclick="showPage('home')">← Terug naar overzicht</button>
+ <div class="page-head"><div><h2>Mijn weekrooster</h2><p>Je vaste weekindeling blijft iedere week hetzelfde.</p></div></div>
+ <div class="panel" style="margin-bottom:16px">
+  <div class="section-title" style="margin-top:0"><div><h2>Vaste weekindeling</h2><p>Voeg schoollessen en studiemomenten toe. Deze herhalen iedere week.</p></div><button class="btn small" onclick="document.getElementById('scheduleForm').scrollIntoView({behavior:'smooth'})">+ Moment toevoegen</button></div>
+  <div id="roosterDays" class="rooster-days"></div>
+ </div>
+ <div class="layout-2">
+  <div class="panel">
+   <h3 style="margin-top:0">Nieuw vast moment</h3>
+   <form id="scheduleForm" onsubmit="addScheduleItem(event)">
+    <div class="form-grid">
+     <div class="field full"><label>Naam</label><input id="scheduleTitle" required placeholder="Bijv. Wiskunde of huiswerk maken"/></div>
+     <div class="field"><label>Dag</label><select id="scheduleDay"><option value="0">Maandag</option><option value="1">Dinsdag</option><option value="2">Woensdag</option><option value="3">Donderdag</option><option value="4">Vrijdag</option><option value="5">Zaterdag</option><option value="6">Zondag</option></select></div>
+     <div class="field"><label>Soort</label><select id="scheduleType"><option value="school">Schoolles</option><option value="study">Thuisstudie</option><option value="other">Anders</option></select></div>
+     <div class="field"><label>Begintijd</label><input id="scheduleStart" type="time" required value="15:00"/></div>
+     <div class="field"><label>Eindtijd</label><input id="scheduleEnd" type="time" required value="16:00"/></div>
+     <div class="field full"><label>Vak (optioneel)</label><select id="scheduleSubject"><option value="">Geen vak</option></select></div>
+    </div>
+    <button class="btn primary" type="submit">Moment opslaan</button>
+   </form>
+  </div>
+  <div class="panel">
+   <h3 style="margin-top:0">Opdrachten van deze week</h3>
+   <p class="rooster-help">Deze lijst is per week nieuw. Je vaste rooster blijft gewoon staan.</p>
+   <div class="field"><label>Nieuwe opdracht</label><input id="weeklyTaskTitle" placeholder="Bijv. Engels woordjes leren"/></div>
+   <div class="form-grid">
+    <div class="field"><label>Vak</label><select id="weeklyTaskSubject"></select></div>
+    <div class="field"><label>Uiterlijk op</label><select id="weeklyTaskDay"><option value="0">Maandag</option><option value="1">Dinsdag</option><option value="2">Woensdag</option><option value="3">Donderdag</option><option value="4">Vrijdag</option><option value="5">Zaterdag</option><option value="6">Zondag</option></select></div>
+   </div>
+   <button class="btn primary" onclick="addWeeklyTask()">Opdracht toevoegen</button>
+   <div class="section-title"><div><h2 id="weeklyTitle">Deze week</h2><p>Vink af wat je hebt afgerond.</p></div></div>
+   <div id="weeklyTaskList"></div>
+  </div>
+ </div>
+</section>
+
 <section id="subjects" class="page">
  <button class="back" onclick="showPage('home')">← Terug naar overzicht</button><div class="page-head"><div><h2>Mijn vakken</h2><p>Bekijk huiswerk, toetsen, cijfers en notities per vak.</p></div></div>
  <div class="panel"><div class="field" style="max-width:320px"><label>Kies een vak</label><select id="subjectPick" onchange="renderSubject()"></select></div><div id="subjectDetails"></div></div>
@@ -105,7 +165,63 @@ try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved)data={...
 function save(){localStorage.setItem(KEY,JSON.stringify(data));renderAll()}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function options(id,selected){document.getElementById(id).innerHTML=SUBJECTS.map(s=>`<option ${s===selected?'selected':''}>${s}</option>`).join('')}
-function init(){['taskSubject','gradeSubject','calcSubject','subjectPick'].forEach(id=>options(id));let d=new Date();document.getElementById('todayLabel').textContent=d.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long'});document.getElementById('taskDate').value=localDate(d);renderAll()}
+
+const DAY_NAMES=['Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag','Zondag'];
+function mondayOf(date){
+ let d=new Date(date);d.setHours(12,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return localDate(d);
+}
+function weekDate(dayIndex){
+ let d=new Date(mondayOf(new Date())+'T12:00:00');d.setDate(d.getDate()+Number(dayIndex));return localDate(d);
+}
+function weekLabel(){
+ let start=new Date(mondayOf(new Date())+'T12:00:00'),end=new Date(start);end.setDate(end.getDate()+6);
+ return start.toLocaleDateString('nl-NL',{day:'numeric',month:'short'})+' t/m '+end.toLocaleDateString('nl-NL',{day:'numeric',month:'short'});
+}
+function addScheduleItem(e){
+ e.preventDefault();
+ const start=document.getElementById('scheduleStart').value,end=document.getElementById('scheduleEnd').value;
+ if(end<=start){alert('De eindtijd moet na de begintijd liggen.');return;}
+ data.weekSchedule=data.weekSchedule||[];
+ data.weekSchedule.push({id:Date.now(),title:document.getElementById('scheduleTitle').value,day:Number(document.getElementById('scheduleDay').value),type:document.getElementById('scheduleType').value,start,end,subject:document.getElementById('scheduleSubject').value});
+ e.target.reset();document.getElementById('scheduleStart').value='15:00';document.getElementById('scheduleEnd').value='16:00';save();
+}
+function deleteScheduleItem(id){
+ if(confirm('Dit vaste roosterblok verwijderen?')){data.weekSchedule=(data.weekSchedule||[]).filter(x=>x.id!==id);save();}
+}
+function renderRooster(){
+ const items=data.weekSchedule||[];
+ const host=document.getElementById('roosterDays');if(!host)return;
+ host.innerHTML=DAY_NAMES.map((day,i)=>{
+  const blocks=items.filter(x=>Number(x.day)===i).sort((a,b)=>a.start.localeCompare(b.start));
+  return `<div class="rooster-day"><h3>${day}</h3>${blocks.length?blocks.map(x=>`<div class="rooster-block ${x.type==='study'?'study':''}"><strong>${esc(x.start)}–${esc(x.end)}</strong>${esc(x.title)}${x.subject?`<small>${esc(x.subject)}</small>`:''}<small>${x.type==='school'?'Schoolles':x.type==='study'?'Thuisstudie':'Anders'}</small><button onclick="deleteScheduleItem(${x.id})">Verwijderen</button></div>`).join(''):'<small style="color:var(--muted)">Nog niets gepland</small>'}</div>`;
+ }).join('');
+ renderWeeklyTasks();
+}
+function currentWeekTasks(){
+ const key=mondayOf(new Date());
+ return (data.weeklyTasks||[]).filter(t=>t.week===key);
+}
+function addWeeklyTask(){
+ const input=document.getElementById('weeklyTaskTitle'),title=input.value.trim();
+ if(!title){alert('Vul eerst een opdracht in.');input.focus();return;}
+ data.weeklyTasks=data.weeklyTasks||[];
+ data.weeklyTasks.push({id:Date.now(),week:mondayOf(new Date()),title,subject:document.getElementById('weeklyTaskSubject').value,day:Number(document.getElementById('weeklyTaskDay').value),done:false});
+ input.value='';save();
+}
+function toggleWeeklyTask(id){
+ const t=(data.weeklyTasks||[]).find(x=>x.id===id);if(t)t.done=!t.done;save();
+}
+function deleteWeeklyTask(id){
+ data.weeklyTasks=(data.weeklyTasks||[]).filter(x=>x.id!==id);save();
+}
+function renderWeeklyTasks(){
+ const list=document.getElementById('weeklyTaskList');if(!list)return;
+ const tasks=currentWeekTasks().sort((a,b)=>a.day-b.day);
+ const title=document.getElementById('weeklyTitle');if(title)title.textContent='Deze week · '+weekLabel();
+ list.innerHTML=tasks.length?tasks.map(t=>`<div class="week-task ${t.done?'done':''}"><input class="check" type="checkbox" ${t.done?'checked':''} onchange="toggleWeeklyTask(${t.id})"><div class="task-info"><strong>${esc(t.title)}</strong><small>${esc(t.subject||'Geen vak')} · ${DAY_NAMES[t.day]||''}</small></div><button class="btn small ghost" onclick="deleteWeeklyTask(${t.id})">✕</button></div>`).join(''):'<div class="empty">Nog geen opdrachten voor deze week. Voeg hierboven je eerste opdracht toe!</div>';
+}
+
+function init(){['taskSubject','gradeSubject','calcSubject','subjectPick','weeklyTaskSubject'].forEach(id=>options(id));document.getElementById('scheduleSubject').innerHTML='<option value="">Geen vak</option>'+SUBJECTS.map(s=>`<option>${esc(s)}</option>`).join('');let d=new Date();document.getElementById('todayLabel').textContent=d.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long'});document.getElementById('taskDate').value=localDate(d);renderAll()}
 function localDate(d){let x=new Date(d.getTime()-d.getTimezoneOffset()*60000);return x.toISOString().slice(0,10)}
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');renderAll();window.scrollTo({top:0,behavior:'smooth'})}
 function addTask(e){e.preventDefault();data.tasks.push({id:Date.now(),title:taskTitle.value,subject:taskSubject.value,type:taskType.value,date:taskDate.value,deadline:taskDeadline.value,duration:taskDuration.value,chapter:taskChapter.value,note:taskNote.value,done:false});e.target.reset();taskDate.value=localDate(new Date());save()}
@@ -128,7 +244,7 @@ function renderWeek(){let start=new Date(),day=(start.getDay()+6)%7;start.setDat
 function renderUpcoming(){let today=localDate(new Date());let arr=data.tasks.filter(t=>(t.deadline||t.date)>=today&&!t.done).sort((a,b)=>(a.deadline||a.date).localeCompare(b.deadline||b.date)).slice(0,5);upcoming.innerHTML=arr.length?arr.map(t=>`<div class="upcoming-item"><strong>${esc(t.title)}</strong><small>${esc(t.subject)} · ${fmt(t.deadline||t.date)}</small></div>`).join(''):'<div class="empty">Geen aankomende deadlines. Lekker bezig!</div>'}
 function renderSubject(){let s=subjectPick.value,ts=data.tasks.filter(t=>t.subject===s),gs=data.grades.filter(g=>g.subject===s),avg=average(gs);let sn=data.subjectNotes[s]||'';subjectDetails.innerHTML=`<div class="subject-card"><h3>${esc(s)}</h3><p>${ts.filter(t=>!t.done).length} openstaande taken · ${gs.length} cijfers · Gemiddelde: <b>${fmtNum(avg)}</b></p></div><div class="layout-2"><div><h3>Schoolwerk</h3><div class="list">${ts.length?ts.map(taskMarkup).join(''):'<div class="empty">Nog geen taken voor dit vak.</div>'}</div><h3 style="margin-top:20px">Cijfers</h3><div class="list">${gs.length?gs.map(g=>`<div class="list-item"><div class="item-main"><strong>${g.value.toFixed(1).replace('.',',')} · ${esc(g.label||'Cijfer')}</strong><small>Weging ${g.weight}</small></div></div>`).join(''):'<div class="empty">Nog geen cijfers voor dit vak.</div>'}</div></div><div><h3>Notities en leerstof</h3><textarea id="subjectNote" style="width:100%;min-height:180px;border:1px solid var(--line);border-radius:12px;padding:12px" placeholder="Schrijf hoofdstukken, leerdoelen of vragen op...">${esc(sn)}</textarea><button class="btn primary" style="margin-top:8px" onclick="data.subjectNotes[subjectPick.value]=document.getElementById('subjectNote').value;localStorage.setItem(KEY,JSON.stringify(data));alert('Notitie bewaard!')">Notitie bewaren</button></div></div>`}
 function renderProgress(){let total=data.tasks.length,done=data.tasks.filter(t=>t.done).length,p=total?Math.round(done/total*100):0;progressText.textContent=p+'% afgerond';progressBar.style.width=p+'%';progressSub.textContent=total?`${done} van de ${total} taken afgerond.`:'Voeg taken toe en vink ze af om je voortgang bij te houden.'}
-function renderAll(){renderProgress();renderWeek();renderUpcoming();renderTasks();renderTests();renderGrades();renderNotes();if(subjectPick.value)renderSubject()}
+function renderAll(){renderProgress();renderWeek();renderUpcoming();renderTasks();renderTests();renderGrades();renderNotes();if(subjectPick.value)renderSubject();renderRooster()}
 function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='mijn-schoolplanner-backup.json';a.click();URL.revokeObjectURL(a.href)}
 function importData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!d.tasks||!d.grades||!d.notes)throw Error();data={...data,...d};save();alert('Back-up teruggezet!')}catch(err){alert('Dit bestand lijkt geen geldige schoolplanner-back-up.')}};r.readAsText(f);e.target.value=''}
 let timerSeconds=1500,timerInterval=null,timerMode='study';
