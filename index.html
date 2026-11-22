@@ -82,7 +82,7 @@ footer{text-align:center;color:#aaa3b2;font-size:11px;margin-top:32px}
  <button class="back" onclick="showPage('home')">← Terug naar overzicht</button><div class="page-head"><div><h2>Dagplanner</h2><p>Voeg huiswerk, leerwerk en persoonlijke schooltaken toe.</p></div></div>
  <div class="layout-2"><div class="panel"><h3 style="margin-top:0">Nieuwe taak</h3><form id="taskForm" onsubmit="addTask(event)"><div class="form-grid">
   <div class="field full"><label>Wat ga je doen?</label><input id="taskTitle" required placeholder="Bijv. Hoofdstuk 3 leren"/></div>
-  <div class="field"><label>Vak</label><select id="taskSubject"></select></div><div class="field"><label>Soort</label><select id="taskType"><option>Huiswerk</option><option>Leren</option><option>Toets</option><option>Opdracht</option><option>Anders</option></select></div>
+  <div class="field"><label>Vak</label><select id="taskSubject"></select></div><div class="field"><label>Soort</label><select id="taskType"><option>Huiswerk</option><option>Leren</option><option>Toets</option><option>Opdracht</option><option>Fietsenmaker</option><option>Schoolwerk</option><option>Anders</option></select></div>
   <div class="field"><label>Plannedag</label><input id="taskDate" type="date" required/></div><div class="field"><label>Deadline (optioneel)</label><input id="taskDeadline" type="date"/></div>
   <div class="field"><label>Duur in minuten</label><input id="taskDuration" type="number" min="5" step="5" placeholder="30"/></div><div class="field"><label>Hoofdstuk / onderdeel</label><input id="taskChapter" placeholder="Bijv. H3 paragraaf 1-2"/></div>
   <div class="field full"><label>Notitie</label><textarea id="taskNote" placeholder="Extra uitleg of wat je niet moet vergeten"></textarea></div>
@@ -104,7 +104,7 @@ footer{text-align:center;color:#aaa3b2;font-size:11px;margin-top:32px}
     <div class="form-grid">
      <div class="field full"><label>Naam</label><input id="scheduleTitle" required placeholder="Bijv. Wiskunde of huiswerk maken"/></div>
      <div class="field"><label>Dag</label><select id="scheduleDay"><option value="0">Maandag</option><option value="1">Dinsdag</option><option value="2">Woensdag</option><option value="3">Donderdag</option><option value="4">Vrijdag</option><option value="5">Zaterdag</option><option value="6">Zondag</option></select></div>
-     <div class="field"><label>Soort</label><select id="scheduleType"><option value="school">Schoolles</option><option value="study">Thuisstudie</option><option value="other">Anders</option></select></div>
+     <div class="field"><label>Soort</label><select id="scheduleType"><option value="school">Schoolles</option><option value="study">Thuisstudie</option><option value="bike">Fietsenmaker</option><option value="schoolwork">Schoolwerk</option><option value="other">Anders</option></select></div>
      <div class="field"><label>Begintijd</label><input id="scheduleStart" type="time" required value="15:00"/></div>
      <div class="field"><label>Eindtijd</label><input id="scheduleEnd" type="time" required value="16:00"/></div>
      <div class="field full"><label>Vak (optioneel)</label><select id="scheduleSubject"><option value="">Geen vak</option></select></div>
@@ -193,7 +193,7 @@ function renderRooster(){
  const host=document.getElementById('roosterDays');if(!host)return;
  host.innerHTML=DAY_NAMES.map((day,i)=>{
   const blocks=items.filter(x=>Number(x.day)===i).sort((a,b)=>a.start.localeCompare(b.start));
-  return `<div class="rooster-day"><h3>${day}</h3>${blocks.length?blocks.map(x=>`<div class="rooster-block ${x.type==='study'?'study':''}"><strong>${esc(x.start)}–${esc(x.end)}</strong>${esc(x.title)}${x.subject?`<small>${esc(x.subject)}</small>`:''}<small>${x.type==='school'?'Schoolles':x.type==='study'?'Thuisstudie':'Anders'}</small><button onclick="deleteScheduleItem(${x.id})">Verwijderen</button></div>`).join(''):'<small style="color:var(--muted)">Nog niets gepland</small>'}</div>`;
+  return `<div class="rooster-day"><h3>${day}</h3>${blocks.length?blocks.map(x=>`<div class="rooster-block ${x.type==='study'?'study':''}"><strong>${esc(x.start)}–${esc(x.end)}</strong>${esc(x.title)}${x.subject?`<small>${esc(x.subject)}</small>`:''}<small>${x.type==='school'?'Schoolles':x.type==='study'?'Thuisstudie':x.type==='bike'?'Fietsenmaker':x.type==='schoolwork'?'Schoolwerk':'Anders'}</small><button onclick="deleteScheduleItem(${x.id})">Verwijderen</button></div>`).join(''):'<small style="color:var(--muted)">Nog niets gepland</small>'}</div>`;
  }).join('');
  renderWeeklyTasks();
 }
