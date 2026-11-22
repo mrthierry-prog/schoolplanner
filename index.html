@@ -44,6 +44,8 @@ footer{text-align:center;color:#aaa3b2;font-size:11px;margin-top:32px}
 .rooster-block strong{display:block;font-size:12px;margin-bottom:3px}
 .rooster-block small{display:block;opacity:.8;margin-top:3px}
 .rooster-block button{border:0;background:#ffffffa8;border-radius:7px;padding:3px 6px;margin-top:6px;font-size:11px;color:inherit}
+.rooster-block{cursor:pointer;transition:transform .15s,box-shadow .15s}.rooster-block:hover{transform:translateY(-2px);box-shadow:0 5px 14px rgba(93,72,130,.12)}
+.lesson-modal{display:none;position:fixed;inset:0;background:rgba(45,35,60,.38);z-index:1000;padding:18px;align-items:center;justify-content:center}.lesson-modal.open{display:flex}.lesson-dialog{background:#fff;width:min(560px,100%);max-height:90vh;overflow:auto;border-radius:22px;padding:22px;box-shadow:0 20px 60px rgba(40,25,60,.2)}.lesson-dialog h2{margin:0 0 5px}.lesson-dialog .muted{color:var(--muted);font-size:13px;margin:0 0 18px}.lesson-actions{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:12px}
 .week-task{display:flex;align-items:flex-start;gap:9px;padding:11px;border:1px solid var(--line);border-radius:12px;margin:8px 0}
 .week-task .task-info{flex:1;min-width:0}
 .week-task.done .task-info strong{text-decoration:line-through;opacity:.55}
@@ -157,6 +159,24 @@ footer{text-align:center;color:#aaa3b2;font-size:11px;margin-top:32px}
 </section>
 <footer>Je planner bewaart je gegevens op dit apparaat. Maak af en toe een back-up. 💜</footer>
 </div>
+<div id="lessonModal" class="lesson-modal" onclick="if(event.target===this)closeLessonDetail()">
+ <div class="lesson-dialog">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+   <div><h2 id="lessonModalTitle">Lesinformatie</h2><p class="muted" id="lessonModalSubtitle"></p></div>
+   <button class="btn ghost small" onclick="closeLessonDetail()">✕ Sluiten</button>
+  </div>
+  <form id="lessonDetailForm" onsubmit="saveLessonDetail(event)">
+   <div class="field"><label>Opdracht / wat moet je doen?</label><textarea id="lessonAssignment" placeholder="Bijv. Maak opdracht 1 t/m 5 en leer de begrippen..."></textarea></div>
+   <div class="form-grid">
+    <div class="field"><label>Bladzijde(n)</label><input id="lessonPages" placeholder="Bijv. 24 t/m 27"/></div>
+    <div class="field"><label>Boek of leermateriaal</label><input id="lessonMaterial" placeholder="Bijv. Rekenen werkboek"/></div>
+   </div>
+   <div class="field"><label>Extra uitleg / opmerkingen</label><textarea id="lessonNotes" placeholder="Schrijf hier extra informatie op..."></textarea></div>
+   <label style="display:flex;align-items:center;gap:9px;font-size:13px;margin:8px 0 16px"><input id="lessonDone" type="checkbox" style="accent-color:var(--lilac-dark)"> Deze les is afgerond</label>
+   <div class="lesson-actions"><button class="btn ghost" type="button" onclick="closeLessonDetail()">Annuleren</button><button class="btn primary" type="submit">Informatie opslaan</button></div>
+  </form>
+ </div>
+</div>
 <script>
 const SUBJECTS=['Nederlands','Engels','Wiskunde','Biologie','Economie','Mens en maatschappij','Anders'];
 const KEY='schoolplanner_lila_combined_v1';
@@ -188,12 +208,36 @@ function addScheduleItem(e){
 function deleteScheduleItem(id){
  if(confirm('Dit vaste roosterblok verwijderen?')){data.weekSchedule=(data.weekSchedule||[]).filter(x=>x.id!==id);save();}
 }
+let activeLessonId=null;
+function openLessonDetail(id){
+ const lesson=(data.weekSchedule||[]).find(x=>x.id===id);if(!lesson)return;
+ activeLessonId=id;
+ document.getElementById('lessonModalTitle').textContent=lesson.title;
+ const type=lesson.type==='school'?'Schoolles':lesson.type==='study'?'Thuisstudie':lesson.type==='bike'?'Fietsenmaker':lesson.type==='schoolwork'?'Schoolwerk':'Anders';
+ document.getElementById('lessonModalSubtitle').textContent=DAY_NAMES[Number(lesson.day)]+' · '+lesson.start+'–'+lesson.end+' · '+(lesson.subject?lesson.subject+' · ':'')+type;
+ document.getElementById('lessonAssignment').value=lesson.assignment||'';
+ document.getElementById('lessonPages').value=lesson.pages||'';
+ document.getElementById('lessonMaterial').value=lesson.material||'';
+ document.getElementById('lessonNotes').value=lesson.notes||'';
+ document.getElementById('lessonDone').checked=!!lesson.done;
+ document.getElementById('lessonModal').classList.add('open');
+}
+function closeLessonDetail(){document.getElementById('lessonModal').classList.remove('open');activeLessonId=null}
+function saveLessonDetail(e){
+ e.preventDefault();const lesson=(data.weekSchedule||[]).find(x=>x.id===activeLessonId);if(!lesson)return;
+ lesson.assignment=document.getElementById('lessonAssignment').value;
+ lesson.pages=document.getElementById('lessonPages').value;
+ lesson.material=document.getElementById('lessonMaterial').value;
+ lesson.notes=document.getElementById('lessonNotes').value;
+ lesson.done=document.getElementById('lessonDone').checked;
+ closeLessonDetail();save();
+}
 function renderRooster(){
  const items=data.weekSchedule||[];
  const host=document.getElementById('roosterDays');if(!host)return;
  host.innerHTML=DAY_NAMES.map((day,i)=>{
   const blocks=items.filter(x=>Number(x.day)===i).sort((a,b)=>a.start.localeCompare(b.start));
-  return `<div class="rooster-day"><h3>${day}</h3>${blocks.length?blocks.map(x=>`<div class="rooster-block ${x.type==='study'?'study':''}"><strong>${esc(x.start)}–${esc(x.end)}</strong>${esc(x.title)}${x.subject?`<small>${esc(x.subject)}</small>`:''}<small>${x.type==='school'?'Schoolles':x.type==='study'?'Thuisstudie':x.type==='bike'?'Fietsenmaker':x.type==='schoolwork'?'Schoolwerk':'Anders'}</small><button onclick="deleteScheduleItem(${x.id})">Verwijderen</button></div>`).join(''):'<small style="color:var(--muted)">Nog niets gepland</small>'}</div>`;
+  return `<div class="rooster-day"><h3>${day}</h3>${blocks.length?blocks.map(x=>`<div class="rooster-block ${x.type==='study'?'study':''}" onclick="openLessonDetail(${x.id})" title="Klik voor lesinformatie"><strong>${esc(x.start)}–${esc(x.end)}</strong>${esc(x.title)}${x.subject?`<small>${esc(x.subject)}</small>`:''}<small>${x.type==='school'?'Schoolles':x.type==='study'?'Thuisstudie':x.type==='bike'?'Fietsenmaker':x.type==='schoolwork'?'Schoolwerk':'Anders'}${x.done?' · ✓ Afgerond':''}</small><button onclick="event.stopPropagation();deleteScheduleItem(${x.id})">Verwijderen</button></div>`).join(''):'<small style="color:var(--muted)">Nog niets gepland</small>'}</div>`;
  }).join('');
  renderWeeklyTasks();
 }
