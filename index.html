@@ -56,6 +56,53 @@ footer{text-align:center;color:#aaa3b2;font-size:11px;margin-top:32px}
 @media(max-width:900px){.rooster-days{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:600px){.rooster-days{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
+
+/* Uitgebreide weekagenda */
+.agenda-shell{display:grid;grid-template-columns:minmax(0,1fr) 255px;gap:14px;align-items:start}
+.agenda-main{min-width:0}
+.agenda-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.agenda-nav{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.agenda-nav strong{min-width:170px;text-align:center;color:var(--lilac-dark)}
+.agenda-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:15px;background:#fff}
+.agenda-calendar{min-width:1120px;display:grid;grid-template-columns:48px repeat(5,minmax(130px,1fr)) repeat(2,minmax(95px,.72fr));align-items:stretch}
+.agenda-time-head,.agenda-day-head{height:58px;position:sticky;top:0;z-index:4;background:#fff;border-bottom:1px solid var(--line)}
+.agenda-time-head{border-right:1px solid var(--line)}
+.agenda-day-head{padding:8px 5px;text-align:center;border-right:1px solid var(--line);cursor:pointer}
+.agenda-day-head strong{display:block;font-size:12px}
+.agenda-day-head span{display:block;font-size:17px;font-weight:750;margin-top:3px}
+.agenda-day-head.today{background:#f5efff;color:var(--lilac-dark)}
+.agenda-day-head.weekend{background:#faf8fc;color:#938ba0}
+.agenda-time-track{min-width:0}.agenda-time-col{position:relative;background:#fff;border-right:1px solid var(--line);height:1224px}
+.agenda-time-label{height:72px;position:relative;font-size:10px;color:var(--muted);text-align:right;padding:0 6px 0 0;top:-6px}
+.agenda-day-track{min-width:0}.agenda-day-col{height:1224px;position:relative;border-right:1px solid var(--line);background:repeating-linear-gradient(to bottom,#fff 0,#fff 17px,#f2eef6 17px,#f2eef6 18px)}
+.agenda-day-col.weekend{background:repeating-linear-gradient(to bottom,#fcfbfd 0,#fcfbfd 17px,#eeeaf2 17px,#eeeaf2 18px)}
+.agenda-day-col.today{background-color:#fdfbff}
+.agenda-day-col.drag-over{background-color:#f0eaff}
+.agenda-event{position:absolute;left:3px;right:3px;min-height:18px;border-radius:7px;padding:4px 5px;overflow:hidden;font-size:10px;line-height:1.25;z-index:2;cursor:grab;border-left:3px solid var(--lilac-dark);background:#eee8ff;color:#51416f;box-shadow:0 1px 4px #54407718}
+.agenda-event.pink{background:#fff0f6;border-color:#d68bad;color:#8e4c6b}
+.agenda-event.green{background:#eaf7ef;border-color:#69a982;color:#426d51}
+.agenda-event.done{display:none}
+.agenda-event strong{display:block;font-size:10px;margin-bottom:2px}
+.agenda-event:active{cursor:grabbing}
+.agenda-sidebar{position:sticky;top:12px}
+.agenda-sidebar h3{font-size:15px;margin:0 0 10px}
+.agenda-side-task{padding:9px;border:1px solid var(--line);border-radius:10px;margin:7px 0;background:#fcfbfe;font-size:12px;cursor:grab}
+.agenda-side-task small{display:block;color:var(--muted);margin-top:3px}
+.agenda-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.agenda-form-grid .field{margin-bottom:8px}
+.agenda-form-grid .field.full{grid-column:1/-1}
+.agenda-form-grid input,.agenda-form-grid select{padding:9px;font-size:12px}
+.agenda-day-view{display:none}
+.agenda-day-view.active{display:block}
+.agenda-day-view .agenda-calendar{grid-template-columns:55px minmax(300px,1fr);min-width:400px}
+.agenda-day-view .agenda-day-track{min-width:300px}.agenda-day-view .agenda-day-col{border-right:0}
+.agenda-day-view .agenda-day-head{cursor:default}
+.agenda-archive{margin-top:12px}
+.agenda-archive summary{cursor:pointer;color:var(--lilac-dark);font-weight:700;font-size:13px}
+.agenda-archive-item{font-size:12px;color:var(--muted);padding:6px 0;border-bottom:1px solid var(--line)}
+@media(max-width:900px){.agenda-shell{grid-template-columns:1fr}.agenda-sidebar{position:static}.agenda-sidebar .agenda-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.agenda-toolbar{align-items:flex-start}.agenda-sidebar .agenda-form-grid{grid-template-columns:1fr}.agenda-form-grid .field.full{grid-column:auto}}
+
 </style>
 </head>
 <body>
@@ -76,6 +123,7 @@ footer{text-align:center;color:#aaa3b2;font-size:11px;margin-top:32px}
   <button class="tile" onclick="showPage('notes')"><span class="ico">🗒️</span><strong>Notities</strong><small>Bewaar ideeën en aantekeningen</small></button>
   <button class="tile" onclick="showPage('timer')"><span class="ico">⏱️</span><strong>Studietimer</strong><small>25 minuten leren, 5 pauze</small></button>
   <button class="tile" onclick="showPage('rooster')"><span class="ico">📅</span><strong>Mijn rooster</strong><small>School, thuisstudie en weekopdrachten</small></button>
+   <button class="tile" onclick="showPage('agenda')"><span class="ico">🗓️</span><strong>Weekagenda</strong><small>Plan je week met een echte tijdlijn</small></button>
  </section>
  <div class="section-title"><div><h2>Mijn week</h2><p>Je geplande schoolwerk per dag</p></div><button class="btn small" onclick="showPage('planner')">+ Taak toevoegen</button></div>
  <section class="week-wrap"><div class="panel"><div class="week-grid" id="weekGrid"></div></div><aside class="panel"><h3 style="margin:0 0 8px;font-size:15px">Binnenkort</h3><div id="upcoming"></div></aside></section>
@@ -128,6 +176,47 @@ footer{text-align:center;color:#aaa3b2;font-size:11px;margin-top:32px}
   </div>
  </div>
 </section>
+
+
+<section id="agenda" class="page">
+ <button class="back" onclick="showPage('home')">← Terug naar overzicht</button>
+ <div class="page-head"><div><h2>Mijn weekagenda</h2><p>Een overzichtelijke weekplanning van 06:00 tot 23:00.</p></div></div>
+ <div class="agenda-toolbar">
+  <div class="agenda-nav">
+   <button class="btn small ghost" onclick="agendaMove(-1)">← Vorige</button>
+   <button class="btn small" onclick="agendaToday()">Vandaag</button>
+   <button class="btn small ghost" onclick="agendaMove(1)">Volgende →</button>
+   <strong id="agendaRange"></strong>
+  </div>
+  <div class="agenda-nav"><button class="btn small" id="agendaWeekBtn" onclick="agendaShowWeek()">Week</button><button class="btn small ghost" id="agendaDayBtn" onclick="agendaShowDay()">Dag</button></div>
+ </div>
+ <div class="agenda-shell">
+  <div class="agenda-main">
+   <div class="agenda-scroll" id="agendaWeekView"><div class="agenda-calendar" id="agendaCalendar"></div></div>
+   <div class="agenda-scroll agenda-day-view" id="agendaDayView"><div class="agenda-calendar" id="agendaDayCalendar"></div></div>
+   <details class="agenda-archive"><summary>Afgeronde activiteiten bekijken</summary><div id="agendaArchive"></div></details>
+  </div>
+  <aside class="panel agenda-sidebar">
+   <h3>Activiteit toevoegen</h3>
+   <form id="agendaForm" onsubmit="agendaAdd(event)">
+    <div class="agenda-form-grid">
+     <div class="field full"><label>Wat ga je doen?</label><input id="agendaTitle" required placeholder="Bijv. Wiskunde leren"></div>
+     <div class="field"><label>Datum</label><input id="agendaDate" type="date" required></div>
+     <div class="field"><label>Categorie</label><select id="agendaCategory"><option value="lilac">Schoolwerk</option><option value="pink">Fietsenmaker</option><option value="green">Vrije tijd</option></select></div>
+     <div class="field"><label>Begintijd</label><input id="agendaStart" type="time" value="15:00" step="900" required></div>
+     <div class="field"><label>Eindtijd</label><input id="agendaEnd" type="time" value="16:00" step="900" required></div>
+     <div class="field full"><label><input id="agendaRepeat" type="checkbox" style="accent-color:var(--lilac-dark)"> Iedere week herhalen</label></div>
+    </div>
+    <button class="btn primary" type="submit">Activiteit opslaan</button>
+   </form>
+   <div class="divider" style="height:1px;background:var(--line);margin:16px 0"></div>
+   <h3>Niet ingepland</h3>
+   <p class="rooster-help">Sleep een activiteit naar een dag en tijd, of voeg eerst een activiteit toe zonder tijdstip.</p>
+   <div id="agendaUnscheduled"></div>
+  </aside>
+ </div>
+</section>
+
 
 <section id="subjects" class="page">
  <button class="back" onclick="showPage('home')">← Terug naar overzicht</button><div class="page-head"><div><h2>Mijn vakken</h2><p>Bekijk huiswerk, toetsen, cijfers en notities per vak.</p></div></div>
@@ -267,7 +356,7 @@ function renderWeeklyTasks(){
 
 function init(){['taskSubject','gradeSubject','calcSubject','subjectPick','weeklyTaskSubject'].forEach(id=>options(id));document.getElementById('scheduleSubject').innerHTML='<option value="">Geen vak</option>'+SUBJECTS.map(s=>`<option>${esc(s)}</option>`).join('');let d=new Date();document.getElementById('todayLabel').textContent=d.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long'});document.getElementById('taskDate').value=localDate(d);renderAll()}
 function localDate(d){let x=new Date(d.getTime()-d.getTimezoneOffset()*60000);return x.toISOString().slice(0,10)}
-function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');renderAll();window.scrollTo({top:0,behavior:'smooth'})}
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');renderAll();if(id==='agenda'&&!document.getElementById('agendaDate').value)document.getElementById('agendaDate').value=localDate(new Date());window.scrollTo({top:0,behavior:'smooth'})}
 function addTask(e){e.preventDefault();data.tasks.push({id:Date.now(),title:taskTitle.value,subject:taskSubject.value,type:taskType.value,date:taskDate.value,deadline:taskDeadline.value,duration:taskDuration.value,chapter:taskChapter.value,note:taskNote.value,done:false});e.target.reset();taskDate.value=localDate(new Date());save()}
 function toggleTask(id){let t=data.tasks.find(x=>x.id===id);if(t)t.done=!t.done;save()}
 function deleteTask(id){if(confirm('Deze taak verwijderen?')){data.tasks=data.tasks.filter(x=>x.id!==id);save()}}
@@ -288,7 +377,7 @@ function renderWeek(){let start=new Date(),day=(start.getDay()+6)%7;start.setDat
 function renderUpcoming(){let today=localDate(new Date());let arr=data.tasks.filter(t=>(t.deadline||t.date)>=today&&!t.done).sort((a,b)=>(a.deadline||a.date).localeCompare(b.deadline||b.date)).slice(0,5);upcoming.innerHTML=arr.length?arr.map(t=>`<div class="upcoming-item"><strong>${esc(t.title)}</strong><small>${esc(t.subject)} · ${fmt(t.deadline||t.date)}</small></div>`).join(''):'<div class="empty">Geen aankomende deadlines. Lekker bezig!</div>'}
 function renderSubject(){let s=subjectPick.value,ts=data.tasks.filter(t=>t.subject===s),gs=data.grades.filter(g=>g.subject===s),avg=average(gs);let sn=data.subjectNotes[s]||'';subjectDetails.innerHTML=`<div class="subject-card"><h3>${esc(s)}</h3><p>${ts.filter(t=>!t.done).length} openstaande taken · ${gs.length} cijfers · Gemiddelde: <b>${fmtNum(avg)}</b></p></div><div class="layout-2"><div><h3>Schoolwerk</h3><div class="list">${ts.length?ts.map(taskMarkup).join(''):'<div class="empty">Nog geen taken voor dit vak.</div>'}</div><h3 style="margin-top:20px">Cijfers</h3><div class="list">${gs.length?gs.map(g=>`<div class="list-item"><div class="item-main"><strong>${g.value.toFixed(1).replace('.',',')} · ${esc(g.label||'Cijfer')}</strong><small>Weging ${g.weight}</small></div></div>`).join(''):'<div class="empty">Nog geen cijfers voor dit vak.</div>'}</div></div><div><h3>Notities en leerstof</h3><textarea id="subjectNote" style="width:100%;min-height:180px;border:1px solid var(--line);border-radius:12px;padding:12px" placeholder="Schrijf hoofdstukken, leerdoelen of vragen op...">${esc(sn)}</textarea><button class="btn primary" style="margin-top:8px" onclick="data.subjectNotes[subjectPick.value]=document.getElementById('subjectNote').value;localStorage.setItem(KEY,JSON.stringify(data));alert('Notitie bewaard!')">Notitie bewaren</button></div></div>`}
 function renderProgress(){let total=data.tasks.length,done=data.tasks.filter(t=>t.done).length,p=total?Math.round(done/total*100):0;progressText.textContent=p+'% afgerond';progressBar.style.width=p+'%';progressSub.textContent=total?`${done} van de ${total} taken afgerond.`:'Voeg taken toe en vink ze af om je voortgang bij te houden.'}
-function renderAll(){renderProgress();renderWeek();renderUpcoming();renderTasks();renderTests();renderGrades();renderNotes();if(subjectPick.value)renderSubject();renderRooster()}
+function renderAll(){renderProgress();renderWeek();renderUpcoming();renderTasks();renderTests();renderGrades();renderNotes();if(subjectPick.value)renderSubject();renderRooster();if(document.getElementById('agendaCalendar'))agendaRender()}
 function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='mijn-schoolplanner-backup.json';a.click();URL.revokeObjectURL(a.href)}
 function importData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!d.tasks||!d.grades||!d.notes)throw Error();data={...data,...d};save();alert('Back-up teruggezet!')}catch(err){alert('Dit bestand lijkt geen geldige schoolplanner-back-up.')}};r.readAsText(f);e.target.value=''}
 let timerSeconds=1500,timerInterval=null,timerMode='study';
@@ -297,6 +386,126 @@ function setTimerMode(mode){clearInterval(timerInterval);timerInterval=null;time
 const timerModeEl=document.getElementById('timerMode');
 function toggleTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null;timerStart.textContent='Verder';return}timerStart.textContent='Pauzeer';timerInterval=setInterval(()=>{timerSeconds--;updateTimer();if(timerSeconds<=0){clearInterval(timerInterval);timerInterval=null;timerStart.textContent='Start';alert(timerMode==='study'?'Goed gewerkt! Tijd voor een pauze.':'Pauze voorbij! Klaar voor de volgende ronde?');setTimerMode(timerMode==='study'?'break':'study')}},1000)}
 function resetTimer(){clearInterval(timerInterval);timerInterval=null;timerStart.textContent='Start';timerSeconds=timerMode==='study'?1500:300;updateTimer()}
+
+/* Weekagenda: 15-minutenrooster, slepen, herhaling en afgeronde activiteiten */
+let agendaOffset=0,agendaMode='week',agendaSelectedDay=0;
+const AGENDA_START=6,AGENDA_END=23,AGENDA_SLOT=18;
+function agendaMonday(offset=agendaOffset){
+ const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7)+offset*7);return d;
+}
+function agendaDateAt(index){
+ const d=agendaMonday();d.setDate(d.getDate()+index);return localDate(d);
+}
+function agendaFmtDate(s,opts={weekday:'short',day:'numeric',month:'short'}){
+ return new Date(s+'T12:00:00').toLocaleDateString('nl-NL',opts);
+}
+function agendaMinutes(t){const [h,m]=t.split(':').map(Number);return h*60+m}
+function agendaAdd(e){
+ e.preventDefault();
+ const title=document.getElementById('agendaTitle').value.trim(),date=document.getElementById('agendaDate').value;
+ const start=document.getElementById('agendaStart').value,end=document.getElementById('agendaEnd').value;
+ if(!title||!date)return;
+ if(end<=start){alert('De eindtijd moet na de begintijd liggen.');return}
+ data.agendaEvents=data.agendaEvents||[];
+ data.agendaEvents.push({id:Date.now(),title,date,start,end,category:document.getElementById('agendaCategory').value,repeat:document.getElementById('agendaRepeat').checked,done:false});
+ e.target.reset();document.getElementById('agendaDate').value=date;document.getElementById('agendaStart').value='15:00';document.getElementById('agendaEnd').value='16:00';save();
+}
+function agendaOccurrences(){
+ const events=data.agendaEvents||[],start=agendaMonday(),out=[];
+ for(let i=0;i<7;i++){
+  const d=new Date(start);d.setDate(d.getDate()+i);const date=localDate(d);
+  events.forEach(ev=>{
+   if(ev.done)return;
+   if(ev.date===date)out.push({...ev,occurrenceDate:date,sourceId:ev.id});
+   else if(ev.repeat && new Date(ev.date+'T12:00:00').getDay()===d.getDay() && ev.date<date){
+    out.push({...ev,occurrenceDate:date,sourceId:ev.id,virtual:true});
+   }
+  });
+ }
+ return out;
+}
+function agendaEventHTML(ev){
+ const top=(agendaMinutes(ev.start)-AGENDA_START*60)/15*AGENDA_SLOT;
+ const height=Math.max(AGENDA_SLOT,(agendaMinutes(ev.end)-agendaMinutes(ev.start))/15*AGENDA_SLOT);
+ const color=ev.category==='pink'?'pink':ev.category==='green'?'green':'';
+ return `<div class="agenda-event ${color}" draggable="true" data-event="${ev.sourceId}" data-date="${ev.occurrenceDate}" data-virtual="${!!ev.virtual}" style="top:${top}px;height:${height}px" ondragstart="agendaDragStart(event)" onclick="agendaClickEvent(event,${ev.sourceId},'${ev.occurrenceDate}')"><strong>${esc(ev.start)}–${esc(ev.end)}</strong>${esc(ev.title)}</div>`;
+}
+function agendaColumn(date,index,dayOnly=false){
+ const d=new Date(date+'T12:00:00'),isToday=date===localDate(new Date()),weekend=index>=5;
+ const head=`<div class="agenda-day-head ${isToday?'today':''} ${weekend?'weekend':''}" ${dayOnly?'':'onclick="agendaOpenDay('+index+')"'}><strong>${DAY_NAMES[index]}</strong><span>${d.getDate()}</span></div>`;
+ const evs=agendaOccurrences().filter(x=>x.occurrenceDate===date);
+ const events=evs.map(agendaEventHTML).join('');
+ return `<div class="agenda-day-track">${head}<div class="agenda-day-col ${isToday?'today':''} ${weekend?'weekend':''}" data-date="${date}" ondragover="agendaDragOver(event)" ondrop="agendaDrop(event,'${date}')">${events}</div></div>`;
+}
+function agendaTimeColumn(){
+ let s='<div class="agenda-time-track"><div class="agenda-time-head"></div><div class="agenda-time-col">';
+ for(let h=AGENDA_START;h<AGENDA_END;h++)s+=`<div class="agenda-time-label">${String(h).padStart(2,'0')}:00</div>`;
+ return s+'</div></div>';
+}
+function agendaRender(){
+ const start=agendaMonday(),end=new Date(start);end.setDate(end.getDate()+6);
+ document.getElementById('agendaRange').textContent=start.toLocaleDateString('nl-NL',{day:'numeric',month:'short'})+' – '+end.toLocaleDateString('nl-NL',{day:'numeric',month:'short',year:'numeric'});
+ const week=document.getElementById('agendaCalendar');
+ week.innerHTML=agendaTimeColumn()+Array.from({length:7},(_,i)=>agendaColumn(agendaDateAt(i),i)).join('');
+ const dayDate=agendaDateAt(agendaSelectedDay);
+ document.getElementById('agendaDayCalendar').innerHTML=agendaTimeColumn()+agendaColumn(dayDate,agendaSelectedDay,true);
+ document.getElementById('agendaWeekView').style.display=agendaMode==='week'?'block':'none';
+ document.getElementById('agendaDayView').classList.toggle('active',agendaMode==='day');
+ document.getElementById('agendaWeekBtn').className='btn small '+(agendaMode==='week'?'':'ghost');
+ document.getElementById('agendaDayBtn').className='btn small '+(agendaMode==='day'?'':'ghost');
+ agendaRenderUnscheduled();agendaRenderArchive();
+}
+function agendaMove(n){agendaOffset+=n;agendaRender()}
+function agendaToday(){agendaOffset=0;agendaSelectedDay=(new Date().getDay()+6)%7;agendaRender()}
+function agendaShowWeek(){agendaMode='week';agendaRender()}
+function agendaShowDay(){agendaMode='day';agendaRender()}
+function agendaOpenDay(i){agendaSelectedDay=i;agendaMode='day';agendaRender()}
+function agendaRenderUnscheduled(){
+ const host=document.getElementById('agendaUnscheduled');
+ const items=(data.agendaEvents||[]).filter(x=>!x.done&&!x.start);
+ host.innerHTML=items.length?items.map(x=>`<div class="agenda-side-task" draggable="true" ondragstart="agendaDragStart(event)" data-event="${x.id}"><strong>${esc(x.title)}</strong><small>Sleep naar de agenda om in te plannen</small></div>`).join(''):'<div class="empty">Geen losse activiteiten.</div>';
+}
+function agendaRenderArchive(){
+ const host=document.getElementById('agendaArchive');
+ const items=(data.agendaEvents||[]).filter(x=>x.done);
+ host.innerHTML=items.length?items.map(x=>`<div class="agenda-archive-item">${esc(x.title)} · ${agendaFmtDate(x.date,{day:'numeric',month:'short',year:'numeric'})}</div>`).join(''):'<p class="rooster-help">Nog geen afgeronde activiteiten.</p>';
+}
+let agendaDragging=null;
+function agendaDragStart(e){agendaDragging={id:Number(e.currentTarget.dataset.event),date:e.currentTarget.dataset.date||null};e.dataTransfer.setData('text/plain',String(agendaDragging.id));}
+function agendaDragOver(e){e.preventDefault();e.currentTarget.classList.add('drag-over')}
+function agendaDrop(e,date){
+ e.preventDefault();e.currentTarget.classList.remove('drag-over');
+ const id=Number(e.dataTransfer.getData('text/plain')),ev=(data.agendaEvents||[]).find(x=>x.id===id);if(!ev)return;
+ const rect=e.currentTarget.getBoundingClientRect(),y=Math.max(0,Math.min(1223,e.clientY-rect.top));
+ const minutes=AGENDA_START*60+Math.round(y/AGENDA_SLOT)*15;
+ const hh=String(Math.floor(minutes/60)).padStart(2,'0'),mm=String(minutes%60).padStart(2,'0');
+ const duration=ev.start?Math.max(15,agendaMinutes(ev.end)-agendaMinutes(ev.start)):60;
+ const endM=Math.min(AGENDA_END*60,minutes+duration);
+ ev.date=date;ev.start=hh+':'+mm;ev.end=String(Math.floor(endM/60)).padStart(2,'0')+':'+String(endM%60).padStart(2,'0');
+ save();
+}
+function agendaClickEvent(e,id,date){
+ if(e.target.closest('button'))return;
+ const ev=(data.agendaEvents||[]).find(x=>x.id===id);if(!ev)return;
+ const action=prompt('Typ: klaar om af te ronden, wijzig om te verplaatsen of verwijder om te wissen.','');
+ if(action===null)return;
+ if(action.toLowerCase()==='klaar'){ev.done=true;save()}
+ else if(action.toLowerCase()==='verwijder'){if(confirm('Activiteit verwijderen?')){data.agendaEvents=data.agendaEvents.filter(x=>x.id!==id);save()}}
+ else if(action.toLowerCase()==='wijzig'){
+  const newDate=prompt('Nieuwe datum (jjjj-mm-dd):',date);if(!newDate)return;
+  const newStart=prompt('Nieuwe begintijd (uu:mm):',ev.start);if(!newStart)return;
+  const newEnd=prompt('Nieuwe eindtijd (uu:mm):',ev.end);if(!newEnd)return;
+  if(newEnd<=newStart){alert('De eindtijd moet na de begintijd liggen.');return}
+  if(ev.repeat && confirm('Deze activiteit herhaalt iedere week. Wil je de wijziging voor deze en alle toekomstige herhalingen toepassen? Kies Annuleren om alleen deze datum aan te passen.')){
+   ev.date=newDate;ev.start=newStart;ev.end=newEnd;
+  }else{
+   data.agendaEvents.push({...ev,id:Date.now(),date:newDate,start:newStart,end:newEnd,repeat:false});
+   if(!ev.repeat && ev.date===date){ev.date=newDate;ev.start=newStart;ev.end=newEnd}
+  }
+  save();
+ }
+}
+
 init();
 </script>
 </body></html>
