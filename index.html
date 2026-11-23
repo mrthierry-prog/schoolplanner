@@ -286,6 +286,31 @@ footer{text-align:center;color:#aaa3b2;font-size:11px;margin-top:32px}
  </div>
 </div>
 
+
+<div id="agendaEventModal" class="lesson-modal" onclick="if(event.target===this)closeAgendaEventDetail()">
+ <div class="lesson-dialog">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+   <div><h2 id="agendaEventModalTitle">Opdrachtinformatie</h2><p class="muted" id="agendaEventModalSubtitle"></p></div>
+   <button class="btn ghost small" type="button" onclick="closeAgendaEventDetail()">✕ Sluiten</button>
+  </div>
+  <form onsubmit="saveAgendaEventDetail(event)">
+   <div class="field"><label>Opdracht / wat moet je doen?</label><textarea id="agendaEventAssignment" placeholder="Beschrijf hier wat je moet maken of leren..."></textarea></div>
+   <div class="form-grid">
+    <div class="field"><label>Bladzijde(n)</label><input id="agendaEventPages" placeholder="Bijv. 24 t/m 27"/></div>
+    <div class="field"><label>Boek of leermateriaal</label><input id="agendaEventMaterial" placeholder="Bijv. Rekenen werkboek"/></div>
+   </div>
+   <div class="field"><label>Extra uitleg / opmerkingen</label><textarea id="agendaEventNotes" placeholder="Extra informatie..."></textarea></div>
+   <div class="lesson-actions">
+    <button class="btn pink" type="button" onclick="deleteAgendaEventFromDetail()">Verwijderen</button>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+     <button class="btn ghost" type="button" onclick="markAgendaEventDone()">✓ Afgerond</button>
+     <button class="btn primary" type="submit">Opslaan</button>
+    </div>
+   </div>
+  </form>
+ </div>
+</div>
+
 <script>
 const SUBJECTS=['Nederlands','Engels','Wiskunde','Biologie','Economie','Mens en maatschappij','Anders'];
 const KEY='schoolplanner_lila_combined_v1';
@@ -474,7 +499,7 @@ function agendaEventHTML(ev){
  const top=(agendaMinutes(ev.start)-AGENDA_START*60)/15*AGENDA_SLOT;
  const height=Math.max(AGENDA_SLOT,(agendaMinutes(ev.end)-agendaMinutes(ev.start))/15*AGENDA_SLOT);
  const color=ev.category==='pink'?'pink':ev.category==='green'?'green':'';
- return `<div class="agenda-event ${color}" draggable="true" data-event="${ev.sourceId}" data-date="${ev.occurrenceDate}" data-virtual="${!!ev.virtual}" style="top:${top}px;height:${height}px" ondragstart="agendaDragStart(event)" onclick="agendaClickEvent(event,${ev.sourceId},'${ev.occurrenceDate}')"><strong>${esc(ev.start)}–${esc(ev.end)}</strong>${esc(ev.title)}</div>`;
+ return `<div class="agenda-event ${color}" title="Klik voor opdrachtinformatie" draggable="true" data-event="${ev.sourceId}" data-date="${ev.occurrenceDate}" data-virtual="${!!ev.virtual}" style="top:${top}px;height:${height}px" ondragstart="agendaDragStart(event)" onclick="agendaClickEvent(event,${ev.sourceId},'${ev.occurrenceDate}')"><strong>${esc(ev.start)}–${esc(ev.end)}</strong>${esc(ev.title)}</div>`;
 }
 function agendaColumn(date,index,dayOnly=false){
  const d=new Date(date+'T12:00:00'),isToday=date===localDate(new Date()),weekend=index>=5;
@@ -530,26 +555,46 @@ function agendaDrop(e,date){
  ev.date=date;ev.start=hh+':'+mm;ev.end=String(Math.floor(endM/60)).padStart(2,'0')+':'+String(endM%60).padStart(2,'0');
  save();
 }
+let activeAgendaEventId=null;
+function openAgendaEventDetail(id,date){
+ const ev=(data.agendaEvents||[]).find(x=>x.id===id);if(!ev)return;
+ activeAgendaEventId=id;
+ document.getElementById('agendaEventModalTitle').textContent=ev.title||'Opdracht';
+ document.getElementById('agendaEventModalSubtitle').textContent=
+  agendaFmtDate(date,{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' · '+(ev.start||'')+(ev.end?'–'+ev.end:'');
+ document.getElementById('agendaEventAssignment').value=ev.assignment||'';
+ document.getElementById('agendaEventPages').value=ev.pages||'';
+ document.getElementById('agendaEventMaterial').value=ev.material||'';
+ document.getElementById('agendaEventNotes').value=ev.notes||'';
+ document.getElementById('agendaEventModal').classList.add('open');
+}
+function closeAgendaEventDetail(){
+ document.getElementById('agendaEventModal').classList.remove('open');
+ activeAgendaEventId=null;
+}
+function saveAgendaEventDetail(e){
+ e.preventDefault();
+ const ev=(data.agendaEvents||[]).find(x=>x.id===activeAgendaEventId);if(!ev)return;
+ ev.assignment=document.getElementById('agendaEventAssignment').value;
+ ev.pages=document.getElementById('agendaEventPages').value;
+ ev.material=document.getElementById('agendaEventMaterial').value;
+ ev.notes=document.getElementById('agendaEventNotes').value;
+ closeAgendaEventDetail();save();
+}
+function markAgendaEventDone(){
+ const ev=(data.agendaEvents||[]).find(x=>x.id===activeAgendaEventId);if(!ev)return;
+ ev.done=true;closeAgendaEventDetail();save();
+}
+function deleteAgendaEventFromDetail(){
+ const id=activeAgendaEventId;if(id===null)return;
+ if(confirm('Deze activiteit/opdracht verwijderen?')){
+  data.agendaEvents=(data.agendaEvents||[]).filter(x=>x.id!==id);
+  closeAgendaEventDetail();save();
+ }
+}
 function agendaClickEvent(e,id,date){
  if(e.target.closest('button'))return;
- const ev=(data.agendaEvents||[]).find(x=>x.id===id);if(!ev)return;
- const action=prompt('Typ: klaar om af te ronden, wijzig om te verplaatsen of verwijder om te wissen.','');
- if(action===null)return;
- if(action.toLowerCase()==='klaar'){ev.done=true;save()}
- else if(action.toLowerCase()==='verwijder'){if(confirm('Activiteit verwijderen?')){data.agendaEvents=data.agendaEvents.filter(x=>x.id!==id);save()}}
- else if(action.toLowerCase()==='wijzig'){
-  const newDate=prompt('Nieuwe datum (jjjj-mm-dd):',date);if(!newDate)return;
-  const newStart=prompt('Nieuwe begintijd (uu:mm):',ev.start);if(!newStart)return;
-  const newEnd=prompt('Nieuwe eindtijd (uu:mm):',ev.end);if(!newEnd)return;
-  if(newEnd<=newStart){alert('De eindtijd moet na de begintijd liggen.');return}
-  if(ev.repeat && confirm('Deze activiteit herhaalt iedere week. Wil je de wijziging voor deze en alle toekomstige herhalingen toepassen? Kies Annuleren om alleen deze datum aan te passen.')){
-   ev.date=newDate;ev.start=newStart;ev.end=newEnd;
-  }else{
-   data.agendaEvents.push({...ev,id:Date.now(),date:newDate,start:newStart,end:newEnd,repeat:false});
-   if(!ev.repeat && ev.date===date){ev.date=newDate;ev.start=newStart;ev.end=newEnd}
-  }
-  save();
- }
+ openAgendaEventDetail(id,date);
 }
 
 init();
