@@ -266,6 +266,26 @@ footer{text-align:center;color:#aaa3b2;font-size:11px;margin-top:32px}
   </form>
  </div>
 </div>
+
+<div id="weeklyTaskModal" class="lesson-modal" onclick="if(event.target===this)closeWeeklyTaskDetail()">
+ <div class="lesson-dialog">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+   <div><h2 id="weeklyTaskModalTitle">Opdrachtinformatie</h2><p class="muted" id="weeklyTaskModalSubtitle"></p></div>
+   <button class="btn ghost small" type="button" onclick="closeWeeklyTaskDetail()">✕ Sluiten</button>
+  </div>
+  <form onsubmit="saveWeeklyTaskDetail(event)">
+   <div class="field"><label>Opdracht / wat moet je doen?</label><textarea id="weeklyTaskAssignment" placeholder="Bijv. Maak opdracht 1 t/m 5 en leer de begrippen..."></textarea></div>
+   <div class="form-grid">
+    <div class="field"><label>Bladzijde(n)</label><input id="weeklyTaskPages" placeholder="Bijv. 24 t/m 27"/></div>
+    <div class="field"><label>Boek of leermateriaal</label><input id="weeklyTaskMaterial" placeholder="Bijv. Rekenen werkboek"/></div>
+   </div>
+   <div class="field"><label>Extra uitleg / opmerkingen</label><textarea id="weeklyTaskNotes" placeholder="Schrijf hier extra informatie op..."></textarea></div>
+   <label style="display:flex;align-items:center;gap:9px;font-size:13px;margin:8px 0 16px"><input id="weeklyTaskDone" type="checkbox" style="accent-color:var(--lilac-dark)"> Deze opdracht is afgerond</label>
+   <div class="lesson-actions"><button class="btn ghost" type="button" onclick="closeWeeklyTaskDetail()">Annuleren</button><button class="btn primary" type="submit">Informatie opslaan</button></div>
+  </form>
+ </div>
+</div>
+
 <script>
 const SUBJECTS=['Nederlands','Engels','Wiskunde','Biologie','Economie','Mens en maatschappij','Anders'];
 const KEY='schoolplanner_lila_combined_v1';
@@ -341,6 +361,32 @@ function addWeeklyTask(){
  data.weeklyTasks.push({id:Date.now(),week:mondayOf(new Date()),title,subject:document.getElementById('weeklyTaskSubject').value,day:Number(document.getElementById('weeklyTaskDay').value),done:false});
  input.value='';save();
 }
+let activeWeeklyTaskId=null;
+function openWeeklyTaskDetail(id){
+ const t=(data.weeklyTasks||[]).find(x=>x.id===id);if(!t)return;
+ activeWeeklyTaskId=id;
+ document.getElementById('weeklyTaskModalTitle').textContent=t.title;
+ document.getElementById('weeklyTaskModalSubtitle').textContent=(t.subject||'Geen vak')+' · '+(DAY_NAMES[t.day]||'');
+ document.getElementById('weeklyTaskAssignment').value=t.assignment||'';
+ document.getElementById('weeklyTaskPages').value=t.pages||'';
+ document.getElementById('weeklyTaskMaterial').value=t.material||'';
+ document.getElementById('weeklyTaskNotes').value=t.notes||'';
+ document.getElementById('weeklyTaskDone').checked=!!t.done;
+ document.getElementById('weeklyTaskModal').classList.add('open');
+}
+function closeWeeklyTaskDetail(){
+ document.getElementById('weeklyTaskModal').classList.remove('open');activeWeeklyTaskId=null;
+}
+function saveWeeklyTaskDetail(e){
+ e.preventDefault();
+ const t=(data.weeklyTasks||[]).find(x=>x.id===activeWeeklyTaskId);if(!t)return;
+ t.assignment=document.getElementById('weeklyTaskAssignment').value;
+ t.pages=document.getElementById('weeklyTaskPages').value;
+ t.material=document.getElementById('weeklyTaskMaterial').value;
+ t.notes=document.getElementById('weeklyTaskNotes').value;
+ t.done=document.getElementById('weeklyTaskDone').checked;
+ closeWeeklyTaskDetail();save();
+}
 function toggleWeeklyTask(id){
  const t=(data.weeklyTasks||[]).find(x=>x.id===id);if(t)t.done=!t.done;save();
 }
@@ -351,7 +397,7 @@ function renderWeeklyTasks(){
  const list=document.getElementById('weeklyTaskList');if(!list)return;
  const tasks=currentWeekTasks().sort((a,b)=>a.day-b.day);
  const title=document.getElementById('weeklyTitle');if(title)title.textContent='Deze week · '+weekLabel();
- list.innerHTML=tasks.length?tasks.map(t=>`<div class="week-task ${t.done?'done':''}"><input class="check" type="checkbox" ${t.done?'checked':''} onchange="toggleWeeklyTask(${t.id})"><div class="task-info"><strong>${esc(t.title)}</strong><small>${esc(t.subject||'Geen vak')} · ${DAY_NAMES[t.day]||''}</small></div><button class="btn small ghost" onclick="deleteWeeklyTask(${t.id})">✕</button></div>`).join(''):'<div class="empty">Nog geen opdrachten voor deze week. Voeg hierboven je eerste opdracht toe!</div>';
+ list.innerHTML=tasks.length?tasks.map(t=>`<div class="week-task ${t.done?'done':''}"><input class="check" type="checkbox" ${t.done?'checked':''} onchange="toggleWeeklyTask(${t.id})"><div class="task-info" onclick="openWeeklyTaskDetail(${t.id})" style="cursor:pointer" title="Klik voor opdrachtinformatie"><strong>${esc(t.title)}</strong><small>${esc(t.subject||'Geen vak')} · ${DAY_NAMES[t.day]||''}</small><small style="color:var(--lilac-dark)">Klik voor bladzijdes en opdrachtinformatie ↗</small></div><button class="btn small ghost" onclick="deleteWeeklyTask(${t.id})">✕</button></div>`).join(''):'<div class="empty">Nog geen opdrachten voor deze week. Voeg hierboven je eerste opdracht toe!</div>';
 }
 
 function init(){['taskSubject','gradeSubject','calcSubject','subjectPick','weeklyTaskSubject'].forEach(id=>options(id));document.getElementById('scheduleSubject').innerHTML='<option value="">Geen vak</option>'+SUBJECTS.map(s=>`<option>${esc(s)}</option>`).join('');let d=new Date();document.getElementById('todayLabel').textContent=d.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long'});document.getElementById('taskDate').value=localDate(d);renderAll()}
