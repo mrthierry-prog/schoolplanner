@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mijn Schoolplanner</title>
+<title>SchoolPlanner</title>
 <style>
-:root{--lilac:#a58bd8;--lilac-dark:#8065b6;--lilac-pale:#f0eaff;--pink:#e9a8c8;--pink-pale:#fff0f6;--ink:#393348;--muted:#827b91;--line:#eee9f5;--white:#fff;--bg:#faf8fd;--shadow:0 8px 24px rgba(93,72,130,.08)}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+:root{--accent:#8fae96;--accent-dark:#52745c;--accent-pale:#e8f0e7;--accent-soft:#f2f6f0;--lilac:#8fae96;--lilac-dark:#52745c;--lilac-pale:#e8f0e7;--pink:#d9a1b6;--pink-pale:#f8eaf0;--ink:#303b32;--muted:#788278;--line:#e5ebe3;--white:#fff;--bg:#f6f8f4;--shadow:0 7px 22px rgba(65,92,69,.07)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,"Aptos",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
 button,input,select,textarea{font:inherit}button{cursor:pointer}
 .app{max-width:1240px;margin:auto;padding:28px 24px 60px}
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}
@@ -103,30 +103,56 @@ footer{text-align:center;color:#aaa3b2;font-size:11px;margin-top:32px}
 @media(max-width:900px){.agenda-shell{grid-template-columns:1fr}.agenda-sidebar{position:static}.agenda-sidebar .agenda-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.agenda-toolbar{align-items:flex-start}.agenda-sidebar .agenda-form-grid{grid-template-columns:1fr}.agenda-form-grid .field.full{grid-column:auto}}
 
+
+/* Nieuwe Sage Green vormgeving */
+body{background:var(--bg)}.app{max-width:none;margin-left:224px;padding:28px 34px 60px;max-width:1500px}.topbar{margin-bottom:22px}.brand .logo{background:var(--accent-pale);color:var(--accent-dark);box-shadow:none}.welcome{background:linear-gradient(115deg,var(--accent-pale),var(--accent-soft));border:1px solid var(--line);position:relative;overflow:hidden}.welcome:after{content:"❧";position:absolute;right:26px;bottom:-25px;font-size:100px;color:var(--accent-dark);opacity:.10;pointer-events:none}.welcome h2{color:var(--ink)}.stat{box-shadow:none}.panel,.progress-card,.tile,.stat{box-shadow:var(--shadow);border-color:var(--line)}.tile{border-color:var(--line)}.tile:nth-child(odd) .ico,.tile:nth-child(even) .ico{background:var(--accent-pale)}
+.side-nav{position:fixed;z-index:100;left:0;top:0;bottom:0;width:208px;padding:24px 14px;background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:7px}.side-brand{display:flex;align-items:center;gap:10px;padding:4px 8px 22px;font-weight:800;font-size:17px;color:var(--accent-dark)}.side-brand span{width:34px;height:34px;border-radius:12px;background:var(--accent-pale);display:grid;place-items:center;font-size:19px}.side-link{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:12px;text-decoration:none;color:var(--muted);font-size:13px;font-weight:650;cursor:pointer;border:0;background:transparent;text-align:left;width:100%;transition:.15s}.side-link:hover,.side-link.active{background:var(--accent-pale);color:var(--accent-dark)}.side-link .nav-ico{width:20px;text-align:center;font-size:17px}.side-bottom{margin-top:auto}.dash-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:16px 0 22px}.dash-stat{background:#fff;border:1px solid var(--line);border-radius:17px;padding:15px;box-shadow:var(--shadow)}.dash-stat .ds-icon{width:34px;height:34px;border-radius:11px;background:var(--accent-pale);display:grid;place-items:center;margin-bottom:9px}.dash-stat strong{font-size:23px;display:block}.dash-stat small{color:var(--muted);font-size:12px}.dash-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(270px,.85fr);gap:15px;margin-bottom:15px}.dash-panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px;box-shadow:var(--shadow);min-width:0}.dash-panel h3{margin:0 0 12px;font-size:15px}.dash-task{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}.dash-task:last-child{border:0}.dash-task small{display:block;color:var(--muted);margin-top:3px}.dash-task .dash-date{margin-left:auto;white-space:nowrap;color:var(--accent-dark);font-size:11px;font-weight:700}.dash-progress{margin:13px 0}.dash-progress-head{display:flex;justify-content:space-between;font-size:12px;margin-bottom:7px}.dash-progress .bar{height:9px;background:var(--accent-soft)}.dash-progress .bar>span{background:var(--accent)}.dash-bottom{display:grid;grid-template-columns:1fr 1fr;gap:15px}.quick-note textarea{width:100%;min-height:76px;border:1px solid var(--line);border-radius:11px;padding:10px;background:var(--bg);color:var(--ink)}.theme-options{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.theme-choice{border:2px solid var(--line);border-radius:15px;padding:13px;background:#fff;text-align:left;color:var(--ink);font-weight:700}.theme-choice.selected{border-color:var(--accent-dark);box-shadow:0 0 0 3px var(--accent-pale)}.theme-swatch{height:48px;border-radius:10px;margin-bottom:9px}.settings-group{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:15px}.settings-group h3{margin:0 0 6px}.settings-group p{color:var(--muted);font-size:13px;margin:0 0 15px}
+@media(max-width:1050px){.dash-stats{grid-template-columns:repeat(2,1fr)}.theme-options{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){.side-nav{width:66px;padding:16px 8px}.side-brand{justify-content:center;padding:3px 0 20px;font-size:0}.side-brand span{font-size:19px}.side-link{justify-content:center;padding:12px 5px}.side-link .nav-text{display:none}.side-link .nav-ico{font-size:19px}.app{margin-left:66px;padding:18px 14px 40px}.dash-grid{grid-template-columns:1fr}.dash-bottom{grid-template-columns:1fr}.theme-options{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){.dash-stats{gap:8px}.dash-stat{padding:11px}.dash-stat strong{font-size:20px}.theme-options{grid-template-columns:1fr 1fr}}
+
 </style>
 </head>
 <body>
+<nav class="side-nav" aria-label="Hoofdnavigatie">
+ <div class="side-brand"><span>🌿</span>SchoolPlanner</div>
+ <button class="side-link active" data-page="home" onclick="showPage('home')"><span class="nav-ico">⌂</span><span class="nav-text">Home</span></button>
+ <button class="side-link" data-page="agenda" onclick="showPage('agenda')"><span class="nav-ico">▦</span><span class="nav-text">Agenda</span></button>
+ <button class="side-link" data-page="planner" onclick="showPage('planner')"><span class="nav-ico">✓</span><span class="nav-text">Schoolwerk</span></button>
+ <button class="side-link" data-page="subjects" onclick="showPage('subjects')"><span class="nav-ico">▤</span><span class="nav-text">Vakken</span></button>
+ <button class="side-link" data-page="grades" onclick="showPage('grades')"><span class="nav-ico">▥</span><span class="nav-text">Cijfers</span></button>
+ <button class="side-link" data-page="tests" onclick="showPage('tests')"><span class="nav-ico">☷</span><span class="nav-text">Toetsen & deadlines</span></button>
+ <button class="side-link" data-page="rooster" onclick="showPage('rooster')"><span class="nav-ico">▦</span><span class="nav-text">Weekrooster</span></button>
+ <button class="side-link" data-page="notes" onclick="showPage('notes')"><span class="nav-ico">✎</span><span class="nav-text">Notities</span></button>
+ <button class="side-link" data-page="timer" onclick="showPage('timer')"><span class="nav-ico">◷</span><span class="nav-text">Studietimer</span></button>
+ <div class="side-bottom"><button class="side-link" data-page="settings" onclick="showPage('settings')"><span class="nav-ico">⚙</span><span class="nav-text">Instellingen</span></button></div>
+</nav>
+
 <div class="app">
 <header class="topbar">
  <div class="brand"><div class="logo">✿</div><div><h1>Mijn Schoolplanner</h1><p>Jouw rustige plek om schoolwerk te plannen</p></div></div>
  <div class="top-actions"><button class="btn ghost" onclick="exportData()">⬇ Back-up</button><button class="btn ghost" onclick="document.getElementById('importFile').click()">⬆ Terugzetten</button><input id="importFile" type="file" accept="application/json" hidden onchange="importData(event)"/></div>
 </header>
 <main id="home" class="page active">
- <section class="welcome"><div><h2>Hoi! Fijn dat je er bent 💜</h2><p>Maak rustig een plan en werk stap voor stap aan je schooldoelen.</p></div><div class="date-pill" id="todayLabel"></div></section>
- <section class="progress-card"><div class="progress-head"><span>Jouw schoolwerkvoortgang</span><span id="progressText">0% afgerond</span></div><div class="bar"><span id="progressBar"></span></div><small style="display:block;color:var(--muted);margin-top:9px" id="progressSub">Vink taken af om je voortgang bij te houden.</small></section>
- <div class="section-title"><div><h2>Waar wil je mee aan de slag?</h2><p>Kies een onderdeel om te openen</p></div></div>
- <section class="tiles">
-  <button class="tile" onclick="showPage('planner')"><span class="ico">🗓️</span><strong>Dagplanner</strong><small>Plan je taken en huiswerk</small></button>
-  <button class="tile" onclick="showPage('subjects')"><span class="ico">📚</span><strong>Mijn vakken</strong><small>Alles overzichtelijk per vak</small></button>
-  <button class="tile" onclick="showPage('tests')"><span class="ico">📝</span><strong>Toetsen & deadlines</strong><small>Wat komt eraan?</small></button>
-  <button class="tile" onclick="showPage('grades')"><span class="ico">🌟</span><strong>Cijfers</strong><small>Gemiddelden en berekeningen</small></button>
-  <button class="tile" onclick="showPage('notes')"><span class="ico">🗒️</span><strong>Notities</strong><small>Bewaar ideeën en aantekeningen</small></button>
-  <button class="tile" onclick="showPage('timer')"><span class="ico">⏱️</span><strong>Studietimer</strong><small>25 minuten leren, 5 pauze</small></button>
-  <button class="tile" onclick="showPage('rooster')"><span class="ico">📅</span><strong>Mijn rooster</strong><small>School, thuisstudie en weekopdrachten</small></button>
-   <button class="tile" onclick="showPage('agenda')"><span class="ico">🗓️</span><strong>Weekagenda</strong><small>Plan je week met een echte tijdlijn</small></button>
+ <section class="welcome"><div><h2>Goedemiddag! Fijn dat je er bent 🌿</h2><p>Een rustig overzicht van je schoolwerk en je NHA-fietsenmakersopleiding.</p></div><div class="date-pill" id="todayLabel"></div></section>
+ <section class="dash-stats">
+  <div class="dash-stat"><div class="ds-icon">✓</div><strong id="dashTodayCount">0</strong><small>Taken vandaag</small></div>
+  <div class="dash-stat"><div class="ds-icon">✦</div><strong id="dashDoneCount">0</strong><small>Afgerond deze week</small></div>
+  <div class="dash-stat"><div class="ds-icon">▣</div><strong id="dashDeadlineCount">0</strong><small>Komende deadlines</small></div>
+  <div class="dash-stat"><div class="ds-icon">↗</div><strong id="dashProgressCount">0%</strong><small>Totale voortgang</small></div>
  </section>
- <div class="section-title"><div><h2>Mijn week</h2><p>Je geplande schoolwerk per dag</p></div><button class="btn small" onclick="showPage('planner')">+ Taak toevoegen</button></div>
- <section class="week-wrap"><div class="panel"><div class="week-grid" id="weekGrid"></div></div><aside class="panel"><h3 style="margin:0 0 8px;font-size:15px">Binnenkort</h3><div id="upcoming"></div></aside></section>
+ <div class="dash-grid">
+  <section class="dash-panel"><h3>Vandaag <button class="btn small" style="float:right" onclick="showPage('agenda')">Volledige agenda →</button></h3><div id="dashTodayList"></div></section>
+  <section class="dash-panel"><h3>Komende deadlines</h3><div id="dashDeadlines"></div></section>
+ </div>
+ <div class="dash-grid">
+  <section class="dash-panel"><h3>Mijn voortgang</h3><div id="dashProgress"></div></section>
+  <section class="dash-panel"><h3>Recent geopend</h3><div id="dashRecent"><div class="empty">Je recent geopende lessen en opdrachten verschijnen hier.</div></div></section>
+ </div>
+ <div class="dash-bottom">
+  <section class="dash-panel quick-note"><h3>Snelle notitie</h3><textarea id="dashQuickNote" placeholder="Schrijf snel iets op dat je niet wilt vergeten..."></textarea><button class="btn primary small" style="margin-top:8px" onclick="saveQuickNote()">Notitie bewaren</button><small id="quickNoteStatus" style="display:block;color:var(--muted);margin-top:6px"></small></section>
+  <section class="dash-panel"><h3>Snelle toegang</h3><div class="tiles" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:8px"><button class="tile" onclick="showPage('planner')"><span class="ico">✓</span><strong>Schoolwerk</strong><small>Mijn opdrachten</small></button><button class="tile" onclick="showPage('agenda')"><span class="ico">▦</span><strong>Agenda</strong><small>Mijn planning</small></button><button class="tile" onclick="showPage('rooster')"><span class="ico">▤</span><strong>Weekrooster</strong><small>Vaste momenten</small></button><button class="tile" onclick="showPage('tests')"><span class="ico">✎</span><strong>Deadlines</strong><small>Wat komt eraan?</small></button></div></section>
+ </div>
 </main>
 <section id="planner" class="page">
  <button class="back" onclick="showPage('home')">← Terug naar overzicht</button><div class="page-head"><div><h2>Dagplanner</h2><p>Voeg huiswerk, leerwerk en persoonlijke schooltaken toe.</p></div></div>
@@ -311,6 +337,21 @@ footer{text-align:center;color:#aaa3b2;font-size:11px;margin-top:32px}
  </div>
 </div>
 
+
+<section id="settings" class="page">
+ <button class="back" onclick="showPage('home')">← Terug naar home</button>
+ <div class="page-head"><div><h2>Uiterlijk & thema</h2><p>Kies de kleur die jij het prettigst vindt. Je keuze wordt automatisch bewaard.</p></div></div>
+ <div class="settings-group"><h3>Kies je kleurenthema</h3><p>De gekozen kleur wordt gebruikt voor knoppen, accenten, geselecteerde menu-items en lichte achtergronden.</p>
+  <div class="theme-options">
+   <button class="theme-choice" data-theme="green" onclick="setTheme('green')"><div class="theme-swatch" style="background:linear-gradient(135deg,#8fae96,#e8f0e7)"></div>🌿 Groen</button>
+   <button class="theme-choice" data-theme="purple" onclick="setTheme('purple')"><div class="theme-swatch" style="background:linear-gradient(135deg,#a891ce,#f0eaf8)"></div>💜 Paars</button>
+   <button class="theme-choice" data-theme="rose" onclick="setTheme('rose')"><div class="theme-swatch" style="background:linear-gradient(135deg,#d99bb5,#f8e8ef)"></div>🌸 Rosé</button>
+   <button class="theme-choice" data-theme="blue" onclick="setTheme('blue')"><div class="theme-swatch" style="background:linear-gradient(135deg,#8eadd5,#e7eff9)"></div>💧 Blauw</button>
+   <button class="theme-choice" data-theme="orange" onclick="setTheme('orange')"><div class="theme-swatch" style="background:linear-gradient(135deg,#e8b987,#fbf0e3)"></div>☀️ Licht oranje</button>
+  </div></div>
+ <div class="settings-group"><h3>Gegevens en back-up</h3><p>Bewaar je plannergegevens of zet een eerder gemaakte back-up terug.</p><button class="btn" onclick="exportData()">⬇ Back-up downloaden</button> <button class="btn" onclick="document.getElementById('importFile').click()">⬆ Back-up terugzetten</button></div>
+</section>
+
 <script>
 const SUBJECTS=['Nederlands','Engels','Wiskunde','Biologie','Economie','Mens en maatschappij','Anders'];
 const KEY='schoolplanner_lila_combined_v1';
@@ -425,9 +466,9 @@ function renderWeeklyTasks(){
  list.innerHTML=tasks.length?tasks.map(t=>`<div class="week-task ${t.done?'done':''}"><input class="check" type="checkbox" ${t.done?'checked':''} onchange="toggleWeeklyTask(${t.id})"><div class="task-info" onclick="openWeeklyTaskDetail(${t.id})" style="cursor:pointer" title="Klik voor opdrachtinformatie"><strong>${esc(t.title)}</strong><small>${esc(t.subject||'Geen vak')} · ${DAY_NAMES[t.day]||''}</small><small style="color:var(--lilac-dark)">Klik voor bladzijdes en opdrachtinformatie ↗</small></div><button class="btn small ghost" onclick="deleteWeeklyTask(${t.id})">✕</button></div>`).join(''):'<div class="empty">Nog geen opdrachten voor deze week. Voeg hierboven je eerste opdracht toe!</div>';
 }
 
-function init(){['taskSubject','gradeSubject','calcSubject','subjectPick','weeklyTaskSubject'].forEach(id=>options(id));document.getElementById('scheduleSubject').innerHTML='<option value="">Geen vak</option>'+SUBJECTS.map(s=>`<option>${esc(s)}</option>`).join('');let d=new Date();document.getElementById('todayLabel').textContent=d.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long'});document.getElementById('taskDate').value=localDate(d);renderAll()}
+function init(){setTheme(localStorage.getItem(THEME_KEY)||'green');document.getElementById('dashQuickNote').value=localStorage.getItem('schoolplanner_quick_note')||'';['taskSubject','gradeSubject','calcSubject','subjectPick','weeklyTaskSubject'].forEach(id=>options(id));document.getElementById('scheduleSubject').innerHTML='<option value="">Geen vak</option>'+SUBJECTS.map(s=>`<option>${esc(s)}</option>`).join('');let d=new Date();document.getElementById('todayLabel').textContent=d.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long'});document.getElementById('taskDate').value=localDate(d);renderAll()}
 function localDate(d){let x=new Date(d.getTime()-d.getTimezoneOffset()*60000);return x.toISOString().slice(0,10)}
-function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');renderAll();if(id==='agenda'&&!document.getElementById('agendaDate').value)document.getElementById('agendaDate').value=localDate(new Date());window.scrollTo({top:0,behavior:'smooth'})}
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.side-link').forEach(b=>b.classList.toggle('active',b.dataset.page===id));renderAll();if(id==='agenda'&&!document.getElementById('agendaDate').value)document.getElementById('agendaDate').value=localDate(new Date());if(id==='settings')setTheme(localStorage.getItem(THEME_KEY)||'green');window.scrollTo({top:0,behavior:'smooth'})}
 function addTask(e){e.preventDefault();data.tasks.push({id:Date.now(),title:taskTitle.value,subject:taskSubject.value,type:taskType.value,date:taskDate.value,deadline:taskDeadline.value,duration:taskDuration.value,chapter:taskChapter.value,note:taskNote.value,done:false});e.target.reset();taskDate.value=localDate(new Date());save()}
 function toggleTask(id){let t=data.tasks.find(x=>x.id===id);if(t)t.done=!t.done;save()}
 function deleteTask(id){if(confirm('Deze taak verwijderen?')){data.tasks=data.tasks.filter(x=>x.id!==id);save()}}
@@ -448,7 +489,7 @@ function renderWeek(){let start=new Date(),day=(start.getDay()+6)%7;start.setDat
 function renderUpcoming(){let today=localDate(new Date());let arr=data.tasks.filter(t=>(t.deadline||t.date)>=today&&!t.done).sort((a,b)=>(a.deadline||a.date).localeCompare(b.deadline||b.date)).slice(0,5);upcoming.innerHTML=arr.length?arr.map(t=>`<div class="upcoming-item"><strong>${esc(t.title)}</strong><small>${esc(t.subject)} · ${fmt(t.deadline||t.date)}</small></div>`).join(''):'<div class="empty">Geen aankomende deadlines. Lekker bezig!</div>'}
 function renderSubject(){let s=subjectPick.value,ts=data.tasks.filter(t=>t.subject===s),gs=data.grades.filter(g=>g.subject===s),avg=average(gs);let sn=data.subjectNotes[s]||'';subjectDetails.innerHTML=`<div class="subject-card"><h3>${esc(s)}</h3><p>${ts.filter(t=>!t.done).length} openstaande taken · ${gs.length} cijfers · Gemiddelde: <b>${fmtNum(avg)}</b></p></div><div class="layout-2"><div><h3>Schoolwerk</h3><div class="list">${ts.length?ts.map(taskMarkup).join(''):'<div class="empty">Nog geen taken voor dit vak.</div>'}</div><h3 style="margin-top:20px">Cijfers</h3><div class="list">${gs.length?gs.map(g=>`<div class="list-item"><div class="item-main"><strong>${g.value.toFixed(1).replace('.',',')} · ${esc(g.label||'Cijfer')}</strong><small>Weging ${g.weight}</small></div></div>`).join(''):'<div class="empty">Nog geen cijfers voor dit vak.</div>'}</div></div><div><h3>Notities en leerstof</h3><textarea id="subjectNote" style="width:100%;min-height:180px;border:1px solid var(--line);border-radius:12px;padding:12px" placeholder="Schrijf hoofdstukken, leerdoelen of vragen op...">${esc(sn)}</textarea><button class="btn primary" style="margin-top:8px" onclick="data.subjectNotes[subjectPick.value]=document.getElementById('subjectNote').value;localStorage.setItem(KEY,JSON.stringify(data));alert('Notitie bewaard!')">Notitie bewaren</button></div></div>`}
 function renderProgress(){let total=data.tasks.length,done=data.tasks.filter(t=>t.done).length,p=total?Math.round(done/total*100):0;progressText.textContent=p+'% afgerond';progressBar.style.width=p+'%';progressSub.textContent=total?`${done} van de ${total} taken afgerond.`:'Voeg taken toe en vink ze af om je voortgang bij te houden.'}
-function renderAll(){renderProgress();renderWeek();renderUpcoming();renderTasks();renderTests();renderGrades();renderNotes();if(subjectPick.value)renderSubject();renderRooster();if(document.getElementById('agendaCalendar'))agendaRender()}
+function renderAll(){renderProgress();if(document.getElementById('dashTodayList'))renderDashboard();renderWeek();renderUpcoming();renderTasks();renderTests();renderGrades();renderNotes();if(subjectPick.value)renderSubject();renderRooster();if(document.getElementById('agendaCalendar'))agendaRender()}
 function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='mijn-schoolplanner-backup.json';a.click();URL.revokeObjectURL(a.href)}
 function importData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!d.tasks||!d.grades||!d.notes)throw Error();data={...data,...d};save();alert('Back-up teruggezet!')}catch(err){alert('Dit bestand lijkt geen geldige schoolplanner-back-up.')}};r.readAsText(f);e.target.value=''}
 let timerSeconds=1500,timerInterval=null,timerMode='study';
@@ -596,6 +637,32 @@ function agendaClickEvent(e,id,date){
  if(e.target.closest('button'))return;
  openAgendaEventDetail(id,date);
 }
+
+
+const THEME_KEY='schoolplanner_theme_v1';
+const THEMES={
+ green:{accent:'#8fae96',dark:'#52745c',pale:'#e8f0e7',soft:'#f2f6f0',bg:'#f6f8f4',ink:'#303b32',muted:'#788278',line:'#e5ebe3'},
+ purple:{accent:'#a891ce',dark:'#78619f',pale:'#f0eaf8',soft:'#f7f3fb',bg:'#faf8fd',ink:'#393348',muted:'#827b91',line:'#eee9f5'},
+ rose:{accent:'#d99bb5',dark:'#a65e7d',pale:'#f8e8ef',soft:'#fcf4f7',bg:'#fcf8fa',ink:'#44343c',muted:'#8b7b82',line:'#f0e5ea'},
+ blue:{accent:'#8eadd5',dark:'#557aa9',pale:'#e7eff9',soft:'#f2f6fb',bg:'#f7f9fc',ink:'#303b49',muted:'#788596',line:'#e5ebf2'},
+ orange:{accent:'#e8b987',dark:'#ad7949',pale:'#fbf0e3',soft:'#fdf7ef',bg:'#fcfaf6',ink:'#44392e',muted:'#8b7e70',line:'#f0e8dc'}
+};
+function setTheme(name){const t=THEMES[name]||THEMES.green;const r=document.documentElement.style;r.setProperty('--accent',t.accent);r.setProperty('--accent-dark',t.dark);r.setProperty('--accent-pale',t.pale);r.setProperty('--accent-soft',t.soft);r.setProperty('--lilac',t.accent);r.setProperty('--lilac-dark',t.dark);r.setProperty('--lilac-pale',t.pale);r.setProperty('--bg',t.bg);r.setProperty('--ink',t.ink);r.setProperty('--muted',t.muted);r.setProperty('--line',t.line);r.setProperty('--pink-pale',t.pale);localStorage.setItem(THEME_KEY,name);document.querySelectorAll('.theme-choice').forEach(b=>b.classList.toggle('selected',b.dataset.theme===name));}
+function renderDashboard(){
+ const today=localDate(new Date()),weekStart=new Date();weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));weekStart.setHours(0,0,0,0);const weekEnd=new Date(weekStart);weekEnd.setDate(weekEnd.getDate()+7);
+ const tasks=data.tasks||[],todayTasks=tasks.filter(t=>t.date===today&&!t.done),weekDone=tasks.filter(t=>t.done&&t.date&&new Date(t.date+'T12:00:00')>=weekStart&&new Date(t.date+'T12:00:00')<weekEnd).length;
+ const deadlines=tasks.filter(t=>!t.done&&(t.deadline||t.date)>=today).sort((a,b)=>(a.deadline||a.date).localeCompare(b.deadline||b.date)).slice(0,5);
+ const total=tasks.length,done=tasks.filter(t=>t.done).length,pct=total?Math.round(done/total*100):0;
+ const nTasks=tasks.filter(t=>String(t.type||'').toLowerCase().includes('fietsenmaker')||String(t.subject||'').toLowerCase().includes('nha')||String(t.subject||'').toLowerCase().includes('fiets')).length;
+ const nDone=tasks.filter(t=>(String(t.type||'').toLowerCase().includes('fietsenmaker')||String(t.subject||'').toLowerCase().includes('nha')||String(t.subject||'').toLowerCase().includes('fiets'))&&t.done).length;
+ const sTasks=tasks.filter(t=>!String(t.type||'').toLowerCase().includes('fietsenmaker')&&!String(t.subject||'').toLowerCase().includes('nha')&&!String(t.subject||'').toLowerCase().includes('fiets'));const sDone=sTasks.filter(t=>t.done).length;
+ document.getElementById('dashTodayCount').textContent=todayTasks.length;document.getElementById('dashDoneCount').textContent=weekDone;document.getElementById('dashDeadlineCount').textContent=deadlines.length;document.getElementById('dashProgressCount').textContent=pct+'%';
+ document.getElementById('dashTodayList').innerHTML=todayTasks.length?todayTasks.slice(0,5).map(t=>`<div class="dash-task"><span>◦</span><div><strong>${esc(t.title)}</strong><small>${esc(t.subject||t.type||'Taak')}</small></div>${t.duration?`<span class="dash-date">${esc(t.duration)} min</span>`:''}</div>`).join(''):'<div class="empty">Geen activiteiten voor vandaag. Je hebt ruimte om vooruit te werken!</div>';
+ document.getElementById('dashDeadlines').innerHTML=deadlines.length?deadlines.map(t=>`<div class="dash-task"><span>◷</span><div><strong>${esc(t.title)}</strong><small>${esc(t.subject||t.type||'Taak')}</small></div><span class="dash-date">${fmt(t.deadline||t.date)}</span></div>`).join(''):'<div class="empty">Geen aankomende deadlines.</div>';
+ const bar=(label,d,n)=>{let pc=d?Math.round(n/d*100):0;return `<div class="dash-progress"><div class="dash-progress-head"><strong>${label}</strong><span>${pc}% · ${n}/${d}</span></div><div class="bar"><span style="width:${pc}%"></span></div></div>`};
+ document.getElementById('dashProgress').innerHTML=bar('Schoolwerk',sTasks.length,sDone)+bar('Fietsenmaker · NHA',nTasks,nDone);
+}
+function saveQuickNote(){const v=document.getElementById('dashQuickNote').value;localStorage.setItem('schoolplanner_quick_note',v);document.getElementById('quickNoteStatus').textContent='Notitie bewaard.'}
 
 init();
 </script>
